@@ -25,7 +25,7 @@
 # /testem/phys/addPhysics  emstandard_opt1
 # /testem/phys/addPhysics  emstandard_opt2
 # /testem/phys/addPhysics  emstandard_opt3
-/testem/phys/addPhysics  emstandard_opt4
+# /testem/phys/addPhysics  emstandard_opt4
 # /testem/phys/addPhysics  ionGasModels
 # /testem/phys/addPhysics  standardNR
 # /testem/phys/addPhysics  emlivermore
@@ -39,6 +39,10 @@
 # /testem/phys/addPhysics  HElastic
 # /testem/phys/addPhysics  binary
 # /testem/phys/addPhysics  binary_ion
+ /testem/phys/addPhysics  FTFP_BERT_EMY
+# /testem/phys/addPhysics  FTFP_BERT_EMZ
+# /testem/phys/addPhysics  FTFP_BERT_LIV
+# /testem/phys/addPhysics  FTFP_BERT_PEN  
 #
 /run/initialize
 #

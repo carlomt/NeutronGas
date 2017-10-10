@@ -76,6 +76,8 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
+#include "G4PhysListFactory.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList() : G4VModularPhysicsList(),
@@ -253,10 +255,20 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     fBiciIsRegisted = true;
 
   } else {
-
+    G4PhysListFactory factory;
+    G4VModularPhysicsList* phys =factory.GetReferencePhysList(name);
+    G4int i=0;
+    const G4VPhysicsConstructor* elem= phys->GetPhysics(i);
+    G4VPhysicsConstructor* tmp = const_cast<G4VPhysicsConstructor*> (elem);
+    while (elem !=0)
+      {
+	RegisterPhysics(tmp);
+	elem= phys->GetPhysics(++i) ;
+	tmp = const_cast<G4VPhysicsConstructor*> (elem);
+      }
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
-           << " is not defined"
-           << G4endl;
+	   << " via G4PhysListFactory"
+	   << G4endl;
   }
 }
 
