@@ -11,15 +11,15 @@
 /testem/det/setSizeX  20 cm
 /testem/det/setSizeYZ 20 cm
 #
-/testem/det/tallyNumber 4
-/testem/det/tallyDefinition 0 2. 2. 2. mm
-/testem/det/tallyDefinition 1 2. 2. 2. mm
-/testem/det/tallyDefinition 2 2. 2. 2. mm
-/testem/det/tallyDefinition 3 2. 2. 2. mm
-/testem/det/tallyPosition 0 -9.9 0. 0. cm
-/testem/det/tallyPosition 1 -5.  0. 0. cm
-/testem/det/tallyPosition 2  0.  0. 0. cm
-/testem/det/tallyPosition 3  5.  0. 0. cm
+/testem/det/tallyNumber 0
+# /testem/det/tallyDefinition 0 2. 2. 2. mm
+# /testem/det/tallyDefinition 1 2. 2. 2. mm
+# /testem/det/tallyDefinition 2 2. 2. 2. mm
+# /testem/det/tallyDefinition 3 2. 2. 2. mm
+# /testem/det/tallyPosition 0 -9.9 0. 0. cm
+# /testem/det/tallyPosition 1 -5.  0. 0. cm
+# /testem/det/tallyPosition 2  0.  0. 0. cm
+# /testem/det/tallyPosition 3  5.  0. 0. cm
 #
 # /testem/phys/addPhysics  emstandard_opt0
 # /testem/phys/addPhysics  emstandard_opt1
@@ -47,9 +47,13 @@
 /gun/energy 100 keV
 #
 # step limit
-/run/setCut 0.01 um
+/run/setCut 0.1 um
 #
 /process/list
+#
+/analysis/setFileName F18_SF6_100keV
+/analysis/h1/set 2 100 0 2 mm
+/analysis/h1/set 3 100 0 2 mm
 #
 /run/printProgress 100
 #

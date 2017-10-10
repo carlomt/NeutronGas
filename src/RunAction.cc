@@ -94,8 +94,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
     G4int nbmin = 100;
     G4int nbBins = (G4int)(0.5 + length/stepMax);
     if (nbBins < nbmin) nbBins = nbmin;
-    //    fAnalysisManager->SetH1(1, nbBins, 0., length, "mm");
-    fAnalysisManager->SetH1(1, 100 , 0., 1., "mm");
+    fAnalysisManager->SetH1(1, nbBins, 0., length, "mm");
   }
 }
 
