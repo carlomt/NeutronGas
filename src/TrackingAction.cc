@@ -56,6 +56,17 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
     G4double x = track->GetPosition().x() + 0.5*fDetector->GetAbsorSizeX();
     if(x > 0.0) fRunAction->AddProjRange(x);
     G4AnalysisManager::Instance()->FillH1(3, x);
+
+    // fRunAction->AddTotalRange(track->GetTrackLength());
+    // G4double y = track->GetPosition().y();
+    // G4double z = track->GetPosition().z();    
+    // G4double s = x*x + y*y + z*z;
+    // if (s>0.)
+    //   {
+    // 	s = std::sqrt(s);
+    // 	fRunAction->AddTotalRange(s);
+    //   }
+    fRunAction->AddTotalRange();
   }  
 }
 

@@ -59,6 +59,8 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   G4StepPoint* prePoint  = step->GetPreStepPoint();
   G4StepPoint* postPoint = step->GetPostStepPoint();
 
+  fRunAction->AddThisTotalRange(step->GetStepLength());
+  
   G4int copyNb = prePoint->GetTouchableHandle()->GetCopyNumber();
   if (copyNb > 0) { fRunAction->FillTallyEdep(copyNb-1, edep); }
 
