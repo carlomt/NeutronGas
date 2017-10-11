@@ -7,7 +7,7 @@
 /run/verbose 2
 /tracking/verbose 0
 #
-/testem/det/setSF6pressure 1 atm
+/testem/det/setSF6pressure 100 torr
 #/testem/det/setMat SF6
 /testem/det/setSizeX  20 cm
 /testem/det/setSizeYZ 20 cm
