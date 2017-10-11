@@ -166,6 +166,39 @@ G4Material* DetectorConstruction::DefineSF6(const G4double pressure, const G4dou
   return SF6;
 }
 
+G4Material* DetectorConstruction::DefineMixture(const G4double pressure, const G4double temperature)
+{
+  G4Element* H = new G4Element("Hydrogen", "H", 1,  1.008*g/mole);
+  G4Element* C = new G4Element("Carbon",   "C", 6, 12.011*g/mole);
+  G4Element* F = new G4Element("Fluorine", "F", 9, 18.998*g/mole);
+  
+  G4Material* CF4 = new G4Material( "Tetrafluoromethane", 3.72 *kg/m3, 2, kStateGas);
+  CF4->AddElement(C,  1);
+  CF4->AddElement(F,  4);  
+
+  G4Material* CHF3 = new G4Material( "Fluoroform",         516 *kg/m3, 3, kStateGas);
+  CHF3->AddElement(C,  1);
+  CHF3->AddElement(H,  1);
+  CHF3->AddElement(F,  3);  
+
+  G4Material* C4H10 = new G4Material( "Isobutane",        2.48 *kg/m3, 2, kStateGas);
+  C4H10->AddElement(C,  4);
+  C4H10->AddElement(H, 10);
+
+  G4double STP_density = 6.43e-3 *g/cm3;
+  G4double density     = STP_density * pressure/STP_Pressure * STP_Temperature/temperature;
+  
+  G4Material* Mixture = new G4Material( "CF4-CHF3-C4H10", density, 3);
+  Mixture->AddMaterial(CF4,   70.*perCent);
+  Mixture->AddMaterial(CHF3,  28.*perCent);
+  Mixture->AddMaterial(C4H10,  2.*perCent);
+
+  fAbsorMaterial = Mixture;
+
+  return Mixture;
+}
+
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
 G4VPhysicalVolume* DetectorConstruction::Construct()

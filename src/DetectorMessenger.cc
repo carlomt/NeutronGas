@@ -49,7 +49,8 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
  fTestemDir(nullptr),
  fDetDir(nullptr),    
  fMaterCmd(nullptr),
- fPressCmd(nullptr),
+ fSF6Cmd(nullptr),
+ fMixtCmd(nullptr),
  fWMaterCmd(nullptr),
  fSizeXCmd(nullptr),
  fSizeYZCmd(nullptr),    
@@ -69,12 +70,19 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fMaterCmd->SetParameterName("choice",false);
   fMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  fPressCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setSF6pressure",this);
-  fPressCmd->SetGuidance("Set gas pressure.");
-  fPressCmd->SetParameterName("pressure",false);
-  fPressCmd->SetRange("pressure>0.");
-  fPressCmd->SetUnitCategory("Pressure");
-  fPressCmd->AvailableForStates(G4State_PreInit);
+  fSF6Cmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setSF6pressure",this);
+  fSF6Cmd->SetGuidance("Set SF6 and its pressure.");
+  fSF6Cmd->SetParameterName("pressure",false);
+  fSF6Cmd->SetRange("pressure>0.");
+  fSF6Cmd->SetUnitCategory("Pressure");
+  fSF6Cmd->AvailableForStates(G4State_PreInit);
+
+  fMixtCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setMixturePressure",this);
+  fMixtCmd->SetGuidance("Set mixture gas and its pressure.");
+  fMixtCmd->SetParameterName("pressure",false);
+  fMixtCmd->SetRange("pressure>0.");
+  fMixtCmd->SetUnitCategory("Pressure");
+  fMixtCmd->AvailableForStates(G4State_PreInit);
   
   fWMaterCmd = new G4UIcmdWithAString("/testem/det/setWorldMat",this);
   fWMaterCmd->SetGuidance("Select material of the world.");
@@ -178,6 +186,8 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
 DetectorMessenger::~DetectorMessenger()
 {
   delete fMaterCmd;
+  delete fSF6Cmd;
+  delete fMixtCmd;
   delete fWMaterCmd;
   delete fSizeXCmd;
   delete fSizeYZCmd; 
@@ -232,10 +242,14 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
      vec *= G4UIcommand::ValueOf(unt);
      fDetector->SetTallyPosition(num,vec);
    }
-  if (command == fPressCmd)
+  if (command == fSF6Cmd)
     {
-      fDetector->DefineSF6(fPressCmd->GetNewDoubleValue(newValue));
+      fDetector->DefineSF6(fSF6Cmd->GetNewDoubleValue(newValue));
     }
+  if (command == fMixtCmd)
+    {
+      fDetector->DefineMixture(fMixtCmd->GetNewDoubleValue(newValue));
+    }  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
