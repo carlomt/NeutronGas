@@ -79,6 +79,8 @@ public:
   const G4LogicalVolume* GetLogicalTally(G4int n) const;
      
   void PrintParameters() const;
+
+  G4Material*         DefineSF6(const G4double pressure, const G4double temperature = 273);
   
 private:
 

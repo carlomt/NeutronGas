@@ -49,6 +49,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
  fTestemDir(nullptr),
  fDetDir(nullptr),    
  fMaterCmd(nullptr),
+ fPressCmd(nullptr),
  fWMaterCmd(nullptr),
  fSizeXCmd(nullptr),
  fSizeYZCmd(nullptr),    
@@ -67,6 +68,13 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fMaterCmd->SetGuidance("Select material of the box.");
   fMaterCmd->SetParameterName("choice",false);
   fMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  fPressCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setSF6pressure",this);
+  fPressCmd->SetGuidance("Set gas pressure.");
+  fPressCmd->SetParameterName("pressure",false);
+  fPressCmd->SetRange("pressure>0.");
+  fPressCmd->SetUnitCategory("Pressure");
+  fPressCmd->AvailableForStates(G4State_PreInit);
   
   fWMaterCmd = new G4UIcmdWithAString("/testem/det/setWorldMat",this);
   fWMaterCmd->SetGuidance("Select material of the world.");
@@ -223,7 +231,11 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
      G4ThreeVector vec(v1,v2,v3);
      vec *= G4UIcommand::ValueOf(unt);
      fDetector->SetTallyPosition(num,vec);
-   }      
+   }
+  if (command == fPressCmd)
+    {
+      fDetector->DefineSF6(fPressCmd->GetNewDoubleValue(newValue));
+    }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

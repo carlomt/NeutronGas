@@ -95,41 +95,41 @@ void DetectorConstruction::DefineMaterials()
   //
   G4double torr = 1.33322e-3*bar;
   new G4UnitDefinition( "torr", "torr", "Pressure", torr);
-  //
-  // define Elements
-  //
-  G4Element* H = new G4Element("Hydrogen", "H", 1, 1.008*g/mole);
-  G4Element* N = new G4Element("Nitrogen", "N", 7, 14.01*g/mole);
-  G4Element* O = new G4Element("Oxygen"  , "O", 8, 16.00*g/mole);
-  G4Element* F = new G4Element("Fluorine","F", 9, 18.998*g/mole);
-  G4Element* S = new G4Element("Sulfur", "S", 16, 32.065*g/mole);
-  //
-  // define Materials.
-  //
+  // //
+  // // define Elements
+  // //
+  // G4Element* H = new G4Element("Hydrogen", "H", 1, 1.008*g/mole);
+  // G4Element* N = new G4Element("Nitrogen", "N", 7, 14.01*g/mole);
+  // G4Element* O = new G4Element("Oxygen"  , "O", 8, 16.00*g/mole);
+  // // G4Element* F = new G4Element("Fluorine","F", 9, 18.998*g/mole);
+  // // G4Element* S = new G4Element("Sulfur", "S", 16, 32.065*g/mole);
+  // //
+  // // define Materials.
+  // //
   G4double density, temperature, pressure;
-  G4int    ncomponents, natoms;
-  G4double fractionmass;
+  // G4int    ncomponents, natoms;
+  // G4double fractionmass;
  
-  G4Material* H2O = 
-    new G4Material("Water", density= 1.0*g/cm3, ncomponents=2);
-  H2O->AddElement(H, natoms=2);
-  H2O->AddElement(O, natoms=1);
-  H2O->GetIonisation()->SetMeanExcitationEnergy(78.0*eV);
+  // G4Material* H2O = 
+  //   new G4Material("Water", density= 1.0*g/cm3, ncomponents=2);
+  // H2O->AddElement(H, natoms=2);
+  // H2O->AddElement(O, natoms=1);
+  // H2O->GetIonisation()->SetMeanExcitationEnergy(78.0*eV);
 
-  // In this line both G4_WATER and Water_1.05 will be constructed
-  G4NistManager::Instance()->
-    BuildMaterialWithNewDensity("Water_1.05","G4_WATER",1.05*g/cm3);
+  // // In this line both G4_WATER and Water_1.05 will be constructed
+  // G4NistManager::Instance()->
+  //   BuildMaterialWithNewDensity("Water_1.05","G4_WATER",1.05*g/cm3);
 
-  G4Material* Air = 
-    new G4Material("Air"  , density= 1.290*mg/cm3, ncomponents=2);
-  Air->AddElement(N, fractionmass=0.7);
-  Air->AddElement(O, fractionmass=0.3);
+  // G4Material* Air = 
+  //   new G4Material("Air"  , density= 1.290*mg/cm3, ncomponents=2);
+  // Air->AddElement(N, fractionmass=0.7);
+  // Air->AddElement(O, fractionmass=0.3);
 
-  density     = 1.e-5*g/cm3;
-  pressure    = 2.e-2*bar;
-  temperature = STP_Temperature;  // From PhysicalConstants.h .
-  G4Material* vac = new G4Material( "TechVacuum", density, 1, kStateGas, temperature, pressure );
-  vac->AddMaterial( Air, 1. );
+  // density     = 1.e-5*g/cm3;
+  // pressure    = 2.e-2*bar;
+  // temperature = STP_Temperature;  // From PhysicalConstants.h .
+  // G4Material* vac = new G4Material( "TechVacuum", density, 1, kStateGas, temperature, pressure );
+  // vac->AddMaterial( Air, 1. );
 
   density     = universe_mean_density;    //from PhysicalConstants.h
   pressure    = 3.e-18*pascal;
@@ -138,17 +138,32 @@ void DetectorConstruction::DefineMaterials()
     new G4Material("Galactic", 1, 1.008*g/mole,density,
                    kStateGas,temperature,pressure);
 
+  // temperature = 273*kelvin;
+  // pressure    = 75*torr;
+  // G4Material* SF6 = DefineSF6( pressure, temperature );
+    
+  //default materials
+  fAbsorMaterial = vacuum;
+  fWorldMaterial = vacuum;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4Material* DetectorConstruction::DefineSF6(const G4double pressure, const G4double temperature)
+{
+  G4Element* F = new G4Element("Fluorine","F", 9, 18.998*g/mole);
+  G4Element* S = new G4Element("Sulfur", "S", 16, 32.065*g/mole);
+
   G4double STP_density = 6.43e-3 *g/cm3;
-  temperature = 273*kelvin;
-  pressure    = 75*torr;
-  density     = STP_density * pressure/STP_Pressure * STP_Temperature/temperature;
+  G4double density     = STP_density * pressure/STP_Pressure * STP_Temperature/temperature;
+
   G4Material* SF6 = new G4Material( "SF6", density, 2, kStateGas, temperature, pressure );  
   SF6->AddElement(S, 1);
   SF6->AddElement(F, 6);
-  
-  //default materials
+
   fAbsorMaterial = SF6;
-  fWorldMaterial = vacuum;
+  
+  return SF6;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

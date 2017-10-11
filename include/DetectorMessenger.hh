@@ -63,6 +63,7 @@ private:
   G4UIdirectory*             fTestemDir;
   G4UIdirectory*             fDetDir;    
   G4UIcmdWithAString*        fMaterCmd;
+  G4UIcmdWithADoubleAndUnit* fPressCmd;
   G4UIcmdWithAString*        fWMaterCmd;
   G4UIcmdWithADoubleAndUnit* fSizeXCmd;
   G4UIcmdWithADoubleAndUnit* fSizeYZCmd;    
