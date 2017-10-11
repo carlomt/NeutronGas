@@ -185,7 +185,7 @@ G4Material* DetectorConstruction::DefineMixture(const G4double pressure, const G
   C4H10->AddElement(C,  4);
   C4H10->AddElement(H, 10);
 
-  G4double STP_density = 6.43e-3 *g/cm3;
+  G4double STP_density = 6.43e-3 *g/cm3;//
   G4double density     = STP_density * pressure/STP_Pressure * STP_Temperature/temperature;
   
   G4Material* Mixture = new G4Material( "CF4-CHF3-C4H10", density, 3);
