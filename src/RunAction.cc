@@ -152,7 +152,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //append range to txt file
   std::ofstream outfile;
   outfile.open("ranges.txt", std::ios_base::app);
-  outfile << fTotalRange/mm << std::endl; 
+  outfile << fProjRange/mm << "\t" << fTotalRange/mm << std::endl; 
   
   //compute energy deposition and niel
   //
