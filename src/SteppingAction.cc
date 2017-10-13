@@ -99,9 +99,10 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
       
       if((y1 >= 0.0 && y2 <= ymax) && (z1 >= 0.0 && z2 <= zmax))
 	{
-	  G4double y  = y1 + G4UniformRand()*(y2-y1);
-	  G4double z  = z1 + G4UniformRand()*(z2-z1);
-	  G4double s = std::sqrt(x*x + y*y + z*z);
+	  G4double dx  = (x2-x1);
+	  G4double dy  = (y2-y1);
+	  G4double dz  = (z2-z1);
+	  G4double s = std::sqrt(dx*dx + dy*dy + dz*dz);
 	  fRunAction->AddThisTotalRange(s);
 	}
 
