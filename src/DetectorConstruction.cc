@@ -174,19 +174,22 @@ G4Material* DetectorConstruction::DefineMixture(const G4double pressure, const G
 
   // densities at STP
   G4double rho_CF4 = 3.72 *kg/m3;
-  G4double rho_CHF3 = 516 *kg/m3;
-  G4double rho_C4H10 = 2.48 *kg/m3;
+  G4double rho_CHF3 = 2.946 *kg/m3;
+  G4double rho_C4H10 = 2.51 *kg/m3;
+
+  G4double reference_pressure = 1.*bar;
+  G4double reference_temperature = 288.15*kelvin;
   
-  G4Material* CF4 = new G4Material( "Tetrafluoromethane", rho_CF4, 2, kStateGas);
+  G4Material* CF4 = new G4Material( "Tetrafluoromethane", rho_CF4, 2, kStateGas, reference_temperature, reference_pressure );
   CF4->AddElement(C,  1);
   CF4->AddElement(F,  4);  
 
-  G4Material* CHF3 = new G4Material( "Fluoroform",rho_CHF3, 3, kStateGas);
+  G4Material* CHF3 = new G4Material( "Fluoroform",rho_CHF3, 3, kStateGas, reference_temperature, reference_pressure );
   CHF3->AddElement(C,  1);
   CHF3->AddElement(H,  1);
   CHF3->AddElement(F,  3);  
 
-  G4Material* C4H10 = new G4Material( "Isobutane",rho_C4H10, 2, kStateGas);
+  G4Material* C4H10 = new G4Material( "Isobutane",rho_C4H10, 2, kStateGas, reference_temperature, reference_pressure);
   C4H10->AddElement(C,  4);
   C4H10->AddElement(H, 10);
 
@@ -201,7 +204,7 @@ G4Material* DetectorConstruction::DefineMixture(const G4double pressure, const G
 
   // G4double density     = density_CF4  + density_CHF3 +density_C4H10;
   G4double density     = ( rho_CF4*fraction_CF4 + rho_CHF3*fraction_CHF3 + rho_C4H10*fraction_C4H10 )
-    *pressure/STP_Pressure * (STP_Temperature +15.*kelvin)/temperature;
+    *pressure/reference_pressure * reference_temperature/temperature;
   
   G4Material* Mixture = new G4Material( "CF4-CHF3-C4H10", density, 3);
   Mixture->AddMaterial(CF4,   fraction_CF4);
