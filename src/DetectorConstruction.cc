@@ -194,13 +194,15 @@ G4Material* DetectorConstruction::DefineMixture(const G4double pressure, const G
   G4double fraction_CHF3 = 28.*perCent;
   G4double fraction_C4H10 = 2.*perCent;
    
-  // scale densities with partial pressures and temperatures
-  G4double density_CF4     = fraction_CF4   * pressure/STP_Pressure * STP_Temperature/temperature;
-  G4double density_CHF3    = fraction_CHF3  * pressure/STP_Pressure * STP_Temperature/temperature;
-  G4double density_C4H10   = fraction_C4H10 * pressure/STP_Pressure * STP_Temperature/temperature;  
+  // // scale densities with partial pressures and temperatures
+  // G4double density_CF4     = fraction_CF4   * pressure/STP_Pressure * STP_Temperature/temperature;
+  // G4double density_CHF3    = fraction_CHF3  * pressure/STP_Pressure * STP_Temperature/temperature;
+  // G4double density_C4H10   = fraction_C4H10 * pressure/STP_Pressure * STP_Temperature/temperature;  
 
-  G4double density     = density_CF4  + density_CHF3 +density_C4H10;
-    
+  // G4double density     = density_CF4  + density_CHF3 +density_C4H10;
+  G4double density     = rho_CF4*fraction_CF4 + rho_CHF3*fraction_CHF3 + rho_C4H10*fraction_C4H10
+    *pressure/STP_Pressure * STP_Temperature/temperature;
+  
   G4Material* Mixture = new G4Material( "CF4-CHF3-C4H10", density, 3);
   Mixture->AddMaterial(CF4,   fraction_CF4);
   Mixture->AddMaterial(CHF3,  fraction_CHF3);
