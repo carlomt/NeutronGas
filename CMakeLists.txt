@@ -40,7 +40,7 @@ target_link_libraries(TestEm7 ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(TestEm7_SCRIPTS
-  TestEm7.in vis.mac F18-1.mac plotHisto.C
+  TestEm7.in vis.mac F18-1.mac plotHisto.C plot.gp pres.txt 
   )
 
 foreach(_script ${TestEm7_SCRIPTS})
