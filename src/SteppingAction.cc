@@ -37,11 +37,12 @@
 #include "DetectorConstruction.hh"
 #include "RunAction.hh"
 #include "Randomize.hh"
+#include "EventAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* RuAct)
-:G4UserSteppingAction(),fDetector(det), fRunAction(RuAct)
+SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* RuAct, EventAction* EvAct)
+  :G4UserSteppingAction(),fDetector(det), fRunAction(RuAct), fEventAction(EvAct)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -76,20 +77,22 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
            << " Qp= " << step->GetPostStepPoint()->GetCharge()
            << G4endl;
     */
+    fRunAction->AddThisTotalRange(step->GetStepLength());
+    fEventAction->AddPrimaryTrackLength(step->GetStepLength());
   } 
 
   //Bragg curve
   //        
   G4double xmax = fDetector->GetAbsorSizeX();
-  G4double ymax = fDetector->GetAbsorSizeYZ();
-  G4double zmax = fDetector->GetAbsorSizeYZ();
+  // G4double ymax = fDetector->GetAbsorSizeYZ();
+  // G4double zmax = fDetector->GetAbsorSizeYZ();
    
   G4double x1 = prePoint->GetPosition().x()  + xmax*0.5;
   G4double x2 = postPoint->GetPosition().x() + xmax*0.5;
-  G4double y1 = prePoint->GetPosition().y() ;//+ ymax*0.5;
-  G4double y2 = postPoint->GetPosition().y();//+ ymax*0.5;
-  G4double z1 = prePoint->GetPosition().z() ;//+ zmax*0.5;
-  G4double z2 = postPoint->GetPosition().z();//+ zmax*0.5;
+  // G4double y1 = prePoint->GetPosition().y() ;//+ ymax*0.5;
+  // G4double y2 = postPoint->GetPosition().y();//+ ymax*0.5;
+  // G4double z1 = prePoint->GetPosition().z() ;//+ zmax*0.5;
+  // G4double z2 = postPoint->GetPosition().z();//+ zmax*0.5;
   if(x1 >= 0.0 && x2 <= xmax)
     {  
       G4double x  = x1 + G4UniformRand()*(x2-x1);
@@ -97,14 +100,14 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
       analysisManager->FillH1(1, x, edep);  
       analysisManager->FillH1(2, x, edep);
       
-      if((y1 >= 0.0 && y2 <= ymax) && (z1 >= 0.0 && z2 <= zmax))
-	{
-	  G4double dx  = (x2-x1);
-	  G4double dy  = (y2-y1);
-	  G4double dz  = (z2-z1);
-	  G4double s = std::sqrt(dx*dx + dy*dy + dz*dz);
-	  fRunAction->AddThisTotalRange(s);
-	}
+      // if((y1 >= 0.0 && y2 <= ymax) && (z1 >= 0.0 && z2 <= zmax))
+      // 	{
+      // 	  G4double dx  = (x2-x1);
+      // 	  G4double dy  = (y2-y1);
+      // 	  G4double dz  = (z2-z1);
+      // 	  G4double s = std::sqrt(dx*dx + dy*dy + dz*dz);
+      // 	  fRunAction->AddThisTotalRange(s);
+      // 	}
 
     }
 }

@@ -23,39 +23,36 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm7/include/SteppingAction.hh
-/// \brief Definition of the SteppingAction class
 //
-// $Id: SteppingAction.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: EventAction.hh 
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+//
 
-#ifndef SteppingAction_h
-#define SteppingAction_h 1
+#ifndef EventAction_h
+#define EventAction_h 1
 
-#include "G4UserSteppingAction.hh"
+#include "G4UserEventAction.hh"
+#include "globals.hh"
 
-class DetectorConstruction;
-class RunAction;
-class EventAction;
+class G4EventManager;
+class G4Event;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class SteppingAction : public G4UserSteppingAction
+class EventAction : public G4UserEventAction
 {
-  public:
-  SteppingAction(DetectorConstruction*, RunAction*, EventAction*);
-    virtual ~SteppingAction();
+public:
+  EventAction();
+  virtual ~EventAction();
 
-    virtual void UserSteppingAction(const G4Step*);
-    
-  private:
-    DetectorConstruction* fDetector;
-    RunAction*            fRunAction;
-    EventAction*          fEventAction;
+public: 
+  virtual void BeginOfEventAction(const G4Event* anEvent);
+  virtual void EndOfEventAction(const G4Event* anEvent);
+
+  inline void AddPrimaryTrackLength(const G4double l){fTotalPrimaryTrackLength+=l;};
+
+private:
+  G4double fTotalPrimaryTrackLength;
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif
+

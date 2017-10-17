@@ -43,6 +43,7 @@
 #include "TrackingAction.hh"
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
+#include "EventAction.hh"
 
 #ifdef G4VIS_USE
  #include "G4VisExecutive.hh"
@@ -75,12 +76,14 @@ int main(int argc,char** argv) {
   
   //set user action classes
   //
-  PrimaryGeneratorAction* kin   = new PrimaryGeneratorAction(det);  
+  PrimaryGeneratorAction* kin   = new PrimaryGeneratorAction(det);
+  EventAction*            ev    = new EventAction();
   RunAction*              run   = new RunAction(det,phys,kin);
   TrackingAction*         track = new TrackingAction(det,run);
-  SteppingAction*         step  = new SteppingAction(det,run);
+  SteppingAction*         step  = new SteppingAction(det,run,ev);
   
-  runManager->SetUserAction(kin); 
+  runManager->SetUserAction(kin);
+  runManager->SetUserAction(ev); 
   runManager->SetUserAction(run); 
   runManager->SetUserAction(track);  
   runManager->SetUserAction(step);

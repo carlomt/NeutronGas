@@ -23,39 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm7/include/SteppingAction.hh
-/// \brief Definition of the SteppingAction class
 //
-// $Id: SteppingAction.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: EventAction.cc 66892 2013-01-17 10:57:59Z gunter $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef SteppingAction_h
-#define SteppingAction_h 1
+#include "EventAction.hh"
+#include "G4Event.hh"
+#include "G4EventManager.hh"
+#include "G4ParticleTable.hh"
+#include "G4UnitsTable.hh" 
+#include "globals.hh"
 
-#include "G4UserSteppingAction.hh"
-
-class DetectorConstruction;
-class RunAction;
-class EventAction;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class SteppingAction : public G4UserSteppingAction
+EventAction::EventAction()
+  : G4UserEventAction(),
+    fTotalPrimaryTrackLength(0.)
 {
-  public:
-  SteppingAction(DetectorConstruction*, RunAction*, EventAction*);
-    virtual ~SteppingAction();
+}
 
-    virtual void UserSteppingAction(const G4Step*);
-    
-  private:
-    DetectorConstruction* fDetector;
-    RunAction*            fRunAction;
-    EventAction*          fEventAction;
-};
+EventAction::~EventAction()
+{;}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void EventAction::BeginOfEventAction(const G4Event*)
+{
+    fTotalPrimaryTrackLength = 0.;
+}
 
-#endif
+void EventAction::EndOfEventAction(const G4Event* event)
+{
+  auto eventID = event->GetEventID();
+  G4cout << "---> End of event: " << eventID << G4endl;
+  G4cout<<"EventAction::EndOfEventAction total track length: "<<G4BestUnit(fTotalPrimaryTrackLength,"Length");
+}
+
