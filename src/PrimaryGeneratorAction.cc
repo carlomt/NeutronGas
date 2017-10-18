@@ -78,7 +78,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   //this function is called at the begining of event
   //
-  G4double x0 = -0.5*(fDetector->GetWorldSizeX());
+  G4double x0 = 0.;// -0.5*(fDetector->GetWorldSizeX());
   G4double y0 = 0.*cm, z0 = 0.*cm;
     
   //randomize the beam, if requested.

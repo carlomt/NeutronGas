@@ -35,6 +35,8 @@
 #include "DetectorConstruction.hh"
 #include "RunAction.hh"
 #include "G4Track.hh"
+#include "G4UnitsTable.hh"
+#include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -53,10 +55,14 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
 {
   // extract Projected Range of primary particle
   if (track->GetTrackID() == 1) {
-    G4double x = track->GetPosition().x() + 0.5*fDetector->GetAbsorSizeX();
+    G4double x = track->GetPosition().x() ;//+ 0.5*fDetector->GetAbsorSizeX();
     if(x > 0.0) fRunAction->AddProjRange(x);
     G4AnalysisManager::Instance()->FillH1(3, x);
 
+    G4cout << "TrackingAction::PostUserTrackingAction track length "
+	   << G4BestUnit(track->GetTrackLength(),"Length") << G4endl;
+    
+    
     // fRunAction->AddTotalRange(track->GetTrackLength());
     // G4double y = track->GetPosition().y();
     // G4double z = track->GetPosition().z();    
