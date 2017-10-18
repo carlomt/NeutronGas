@@ -59,8 +59,10 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
     if(x > 0.0) fRunAction->AddProjRange(x);
     G4AnalysisManager::Instance()->FillH1(3, x);
 
-    G4cout << "TrackingAction::PostUserTrackingAction track length "
-	   << G4BestUnit(track->GetTrackLength(),"Length") << G4endl;
+    G4double tl =  track->GetTrackLength();
+    
+    // G4cout << "TrackingAction::PostUserTrackingAction track length "
+    // 	   << tl/CLHEP::mm << " mm"  << G4endl;
     
     
     // fRunAction->AddTotalRange(track->GetTrackLength());
@@ -72,7 +74,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
     // 	s = std::sqrt(s);
     // 	fRunAction->AddTotalRange(s);
     //   }
-    fRunAction->AddTotalRange();
+    fRunAction->AddTotalRange(tl);
   }  
 }
 

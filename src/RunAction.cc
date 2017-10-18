@@ -54,7 +54,7 @@ RunAction::RunAction(DetectorConstruction* det, PhysicsList* phys,
  : G4UserRunAction(),
    fAnalysisManager(0), fDetector(det), fPhysics(phys), fKinematic(kin),
    fTallyEdep(new G4double[kMaxTally]), fProjRange(0.), fProjRange2(0.),
-   fTotalRange(0), fTotalRange2(0), fThisTotalRange(0),
+   fTotalRange(0), fTotalRange2(0),
    fEdeptot(0.), fEniel(0.), fNbPrimarySteps(0), fRange(0)
 { 
   // Book predefined histograms
@@ -140,19 +140,22 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double nstep = G4double(fNbPrimarySteps)/G4double(nbofEvents);
 
   G4cout.precision(6);       
-  G4cout << "\n Projected Range= "<< G4BestUnit(fProjRange,"Length")
-         << "   rms= "            << G4BestUnit( rms,"Length")
-         << G4endl;
-    G4cout << "\n Range= "<< G4BestUnit(fTotalRange,"Length")
-         << "   rms= "            << G4BestUnit( rms_tot,"Length")
-         << G4endl;
+  G4cout <<   "\n Projected Range       = "<< G4BestUnit(fProjRange,"Length")
+         << "   rms = "            << G4BestUnit( rms,"Length");
+
+    G4cout << "\n Total Range (with MS) = "<< G4BestUnit(fTotalRange,"Length")
+         << "   rms = "            << G4BestUnit( rms_tot,"Length")
+         << G4endl << G4endl;
   G4cout << " Mean number of primary steps = "<< nstep << G4endl;
 
 
   //append range to txt file
   std::ofstream outfile;
   outfile.open("ranges.txt", std::ios_base::app);
-  outfile << fProjRange/mm << "\t" << fTotalRange/mm << std::endl; 
+  outfile << energy/keV << "\t"
+	  << fProjRange/mm  << "\t" << rms/mm << "\t"
+	  << fTotalRange/mm << "\t" << rms_tot/mm << "\t"
+	  << std::endl; 
   
   //compute energy deposition and niel
   //

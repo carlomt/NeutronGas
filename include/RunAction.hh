@@ -60,8 +60,7 @@ public:
   inline void FillTallyEdep(G4int n, G4double e);
   inline void FillEdep(G4double de, G4double eni);
   inline void AddProjRange (G4double x);
-  inline void AddTotalRange ();
-  inline void AddThisTotalRange (G4double s);
+  inline void AddTotalRange (const G4double);
   inline void AddPrimaryStep();
                    
 private:  
@@ -75,7 +74,7 @@ private:
   G4double*               fTallyEdep;   
   G4double                fProjRange, fProjRange2;
   G4double                fTotalRange, fTotalRange2;
-  G4double                fThisTotalRange;
+  // G4double                fThisTotalRange;
   G4double                fEdeptot, fEniel;
   G4int                   fNbPrimarySteps;
   G4int                   fRange;
@@ -107,17 +106,15 @@ inline void RunAction::AddProjRange (G4double x)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline void RunAction::AddThisTotalRange (G4double s) 
-{
-  fThisTotalRange += s;
-}
+// inline void RunAction::AddThisTotalRange (G4double s) 
+// {
+//   fThisTotalRange += s;
+// }
 
-inline void RunAction::AddTotalRange () 
+inline void RunAction::AddTotalRange (const G4double range) 
 {
-  G4double s = fThisTotalRange;
-  fTotalRange  += s; 
-  fTotalRange2 += s*s;
-  fThisTotalRange = 0.;
+  fTotalRange  += range; 
+  fTotalRange2 += range*range;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

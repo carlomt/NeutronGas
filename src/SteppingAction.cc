@@ -79,12 +79,12 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
            << " Qp= " << step->GetPostStepPoint()->GetCharge()
            << G4endl;
     */
-    G4cout << "SteppingAction::UserSteppingAction step length     \t"
-    	   // << G4BestUnit(step->GetStepLength(),"Length") << G4endl;
-	   << step->GetStepLength()/CLHEP::mm << " mm " << G4endl;
+    // G4cout << "SteppingAction::UserSteppingAction step length     \t"
+    // 	   // << G4BestUnit(step->GetStepLength(),"Length") << G4endl;
+    // 	   << step->GetStepLength()/CLHEP::mm << " mm " << G4endl;
 
-    fRunAction->AddThisTotalRange(step->GetStepLength());
-    fEventAction->AddPrimaryTrackLength(step->GetStepLength());
+    // fRunAction->AddThisTotalRange(step->GetStepLength());
+    // fEventAction->AddPrimaryTrackLength(step->GetStepLength());
   } 
 
   //Bragg curve
@@ -99,28 +99,28 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   G4double y2 = postPoint->GetPosition().y();//+ ymax*0.5;
   G4double z1 = prePoint->GetPosition().z() ;//+ zmax*0.5;
   G4double z2 = postPoint->GetPosition().z();//+ zmax*0.5;
-  // if(x1 >= 0.0 && x2 <= xmax)
+  if(x1 >= 0.0 && x2 <= xmax)
     {  
       G4double x  = x1 + G4UniformRand()*(x2-x1);
       G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
       analysisManager->FillH1(1, x, edep);  
       analysisManager->FillH1(2, x, edep);
 
-      if (step->GetTrack()->GetTrackID() == 1)
-	{
-      // if((y1 >= 0.0 && y2 <= ymax) && (z1 >= 0.0 && z2 <= zmax))
+      // if (step->GetTrack()->GetTrackID() == 1)
       // 	{
-      	  G4double dx  = (x2-x1);
-      	  G4double dy  = (y2-y1);
-      	  G4double dz  = (z2-z1);
-      	  G4double ss = std::sqrt(dx*dx + dy*dy + dz*dz);
-	  G4cout << "SteppingAction::UserSteppingAction step manually calc \t"
-		 << ss/CLHEP::mm << " mm " << G4endl;
-	  G4cout <<" prePoint:  ("<<x1<<", "<<y1<<", "<<z1<<")" <<G4endl;
-	  G4cout <<" postPoint: ("<<x2<<", "<<y2<<", "<<z2<<")" <<G4endl;
-      // 	  fRunAction->AddThisTotalRange(ss);
+      // // if((y1 >= 0.0 && y2 <= ymax) && (z1 >= 0.0 && z2 <= zmax))
+      // // 	{
+      // 	  G4double dx  = (x2-x1);
+      // 	  G4double dy  = (y2-y1);
+      // 	  G4double dz  = (z2-z1);
+      // 	  G4double ss = std::sqrt(dx*dx + dy*dy + dz*dz);
+      // 	  G4cout << "SteppingAction::UserSteppingAction step manually calc \t"
+      // 		 << ss/CLHEP::mm << " mm " << G4endl;
+      // 	  G4cout <<" prePoint:  ("<<x1<<", "<<y1<<", "<<z1<<")" <<G4endl;
+      // 	  G4cout <<" postPoint: ("<<x2<<", "<<y2<<", "<<z2<<")" <<G4endl;
+      // // 	  fRunAction->AddThisTotalRange(ss);
+      // // 	}
       // 	}
-	}
     }
 }
 

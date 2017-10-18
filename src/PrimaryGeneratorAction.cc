@@ -51,7 +51,8 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
  fDetector(det),
  fRndmBeam(0),
  fEbeamCumul(0),       
- fGunMessenger(0)
+ fGunMessenger(0),
+ fInitialPosition(0,0,0)
 {
   fParticleGun  = new G4ParticleGun(1);
   G4ParticleDefinition* particle
@@ -80,7 +81,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   //
   G4double x0 = 0.;// -0.5*(fDetector->GetWorldSizeX());
   G4double y0 = 0.*cm, z0 = 0.*cm;
-    
+  fInitialPosition = G4ThreeVector(x0,y0,z0);
   //randomize the beam, if requested.
   //
   if (fRndmBeam > 0.) 
@@ -91,7 +92,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       y0 = (2*G4UniformRand()-1.)*rbeam;
       z0 = (2*G4UniformRand()-1.)*rbeam;
     }
-  fParticleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));  
+  fParticleGun->SetParticlePosition(fInitialPosition);
   fParticleGun->GeneratePrimaryVertex(anEvent);
   
   fEbeamCumul += fParticleGun->GetParticleEnergy(); 

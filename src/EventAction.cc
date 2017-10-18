@@ -50,10 +50,9 @@ void EventAction::BeginOfEventAction(const G4Event*)
 
 void EventAction::EndOfEventAction(const G4Event* event)
 {
-  auto eventID = event->GetEventID();
-  G4cout << "---> End of event: " << eventID << G4endl;
-  G4cout << "EventAction::EndOfEventAction total track length: \t"
-	 // << G4BestUnit(fTotalPrimaryTrackLength,"Length") << G4endl;
-	 << fTotalPrimaryTrackLength/CLHEP::mm << "mm" << G4endl;
+  // auto eventID = event->GetEventID();
+  // G4cout << "---> End of event: " << eventID << G4endl;
+  // G4cout << "EventAction::EndOfEventAction total track length: \t"
+  // 	 << fTotalPrimaryTrackLength/CLHEP::mm << " mm" << G4endl;
 }
 
