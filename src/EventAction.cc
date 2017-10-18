@@ -48,7 +48,7 @@ void EventAction::BeginOfEventAction(const G4Event*)
     fTotalPrimaryTrackLength = 0.;
 }
 
-void EventAction::EndOfEventAction(const G4Event* event)
+void EventAction::EndOfEventAction(const G4Event*)
 {
   // auto eventID = event->GetEventID();
   // G4cout << "---> End of event: " << eventID << G4endl;

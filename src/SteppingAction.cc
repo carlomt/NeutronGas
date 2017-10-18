@@ -95,10 +95,10 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
    
   G4double x1 = prePoint->GetPosition().x() ;// + xmax*0.5;
   G4double x2 = postPoint->GetPosition().x() ;// + xmax*0.5;
-  G4double y1 = prePoint->GetPosition().y() ;//+ ymax*0.5;
-  G4double y2 = postPoint->GetPosition().y();//+ ymax*0.5;
-  G4double z1 = prePoint->GetPosition().z() ;//+ zmax*0.5;
-  G4double z2 = postPoint->GetPosition().z();//+ zmax*0.5;
+  // G4double y1 = prePoint->GetPosition().y() ;//+ ymax*0.5;
+  // G4double y2 = postPoint->GetPosition().y();//+ ymax*0.5;
+  // G4double z1 = prePoint->GetPosition().z() ;//+ zmax*0.5;
+  // G4double z2 = postPoint->GetPosition().z();//+ zmax*0.5;
   if(x1 >= 0.0 && x2 <= xmax)
     {  
       G4double x  = x1 + G4UniformRand()*(x2-x1);

@@ -58,8 +58,8 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4double GetEbeamCumul() {return fEbeamCumul;}
      
     G4ParticleGun* GetParticleGun() {return fParticleGun;}
-  const inline G4ThreeVector GetInitialPosition(){return fInitialPosition;};
-  const inline G4bool GetPrimaryEnergy(){return fParticleGun->GetParticleEnergy();};
+  inline G4ThreeVector GetInitialPosition() const {return fInitialPosition;};
+  inline G4bool GetPrimaryEnergy() const {return fParticleGun->GetParticleEnergy();};
   
   private:
     G4ParticleGun*             fParticleGun;

@@ -133,6 +133,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   }
   G4double rms = fProjRange2 - fProjRange*fProjRange;        
   if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
+  fProjRange -= fKinematic->GetInitialPosition().x();
 
   G4double rms_tot = fTotalRange2 - fTotalRange*fTotalRange;        
   if (rms_tot>0.) rms_tot = std::sqrt(rms_tot); else rms_tot = 0.;
