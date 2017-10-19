@@ -77,6 +77,7 @@
 #include "G4SystemOfUnits.hh"
 
 #include "G4PhysListFactory.hh"
+#include "MyEmStandardPhysics_option3.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -254,6 +255,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     fHadronPhys.push_back(new G4IonPhysics(verboseLevel));
     fBiciIsRegisted = true;
 
+  } else if (name == "myem") {
+
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new MyEmStandardPhysics_option3(verboseLevel);
+    
   } else {
     G4PhysListFactory factory;
     G4VModularPhysicsList* phys =factory.GetReferencePhysList(name);
