@@ -256,10 +256,27 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     fBiciIsRegisted = true;
 
   } else if (name == "myem") {
-
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new MyEmStandardPhysics_option3(verboseLevel);
+    
+  } else if (name == "myemhad") {
+    G4PhysListFactory factory;
+    G4VModularPhysicsList* phys =factory.GetReferencePhysList("FTFP_BERT");
+    phys->SetVerboseLevel(verboseLevel);
+    G4int i=0;
+    const G4VPhysicsConstructor* elem= phys->GetPhysics(i);
+    G4VPhysicsConstructor* tmp = const_cast<G4VPhysicsConstructor*> (elem);
+    while (elem !=0)
+      {
+	RegisterPhysics(tmp);
+	elem= phys->GetPhysics(++i) ;
+	tmp = const_cast<G4VPhysicsConstructor*> (elem);
+      }
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new MyEmStandardPhysics_option3(verboseLevel);
+    phys->ReplacePhysics(fEmPhysicsList);
     
   } else {
     G4PhysListFactory factory;

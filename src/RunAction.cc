@@ -94,6 +94,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
     // zoomed histograms are defined by UI command  
     G4double length  = fDetector->GetAbsorSizeX();
     G4double stepMax = fPhysics->GetStepMaxProcess()->GetMaxStep();
+    G4cout << " max step: " << stepMax/mm << G4endl;
     G4int nbmin = 100;
     G4int nbBins = (G4int)(0.5 + length/stepMax);
     if (nbBins < nbmin) nbBins = nbmin;
@@ -132,6 +133,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     fProjRange /= fRange; 
     fProjRange2 /= fRange;
 
+    fTRange /= fRange; 
+    fTRange2 /= fRange;
+    
     fTotalRange /= fRange;
     fTotalRange2 /= fRange;
   }
@@ -139,16 +143,21 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
   fProjRange -= fKinematic->GetInitialPosition().x();
 
+  G4double rms_rt = fTRange2 - fTRange*fTRange;        
+  if (rms_rt>0.) rms_rt = std::sqrt(rms_rt); else rms_rt = 0.;
+  
   G4double rms_tot = fTotalRange2 - fTotalRange*fTotalRange;        
   if (rms_tot>0.) rms_tot = std::sqrt(rms_tot); else rms_tot = 0.;
 
   G4double nstep = G4double(fNbPrimarySteps)/G4double(nbofEvents);
 
   G4cout.precision(6);       
-  G4cout <<   "\n Projected Range       = "<< G4BestUnit(fProjRange,"Length")
+  G4cout << "\n Projected Range        = "<< G4BestUnit(fProjRange,"Length")
          << "   rms = "            << G4BestUnit( rms,"Length");
+  G4cout <<   "\n Range                = "<< G4BestUnit(fTRange,"Length")
+         << "   rms = "            << G4BestUnit( rms_rt,"Length");
 
-    G4cout << "\n Total Range (with MS) = "<< G4BestUnit(fTotalRange,"Length")
+  G4cout << "\n Track Length (with MS) = "<< G4BestUnit(fTotalRange,"Length")
          << "   rms = "            << G4BestUnit( rms_tot,"Length")
          << G4endl << G4endl;
   G4cout << " Mean number of primary steps = "<< nstep << G4endl;
@@ -159,7 +168,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   outfile.open("ranges.txt", std::ios_base::app);
   outfile << energy/keV << "\t"
 	  << fProjRange/mm  << "\t" << rms/mm << "\t"
-	  << fTotalRange/mm << "\t" << rms_tot/mm << "\t"
+	  << fTRange/mm << "\t" << rms_rt/mm << "\t"
 	  << std::endl; 
   
   //compute energy deposition and niel

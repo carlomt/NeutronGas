@@ -56,7 +56,11 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   // extract Projected Range of primary particle
   if (track->GetTrackID() == 1) {
     G4double x = track->GetPosition().x() ;//+ 0.5*fDetector->GetAbsorSizeX();
+    G4double y = track->GetPosition().y() ;//+ 0.5*fDetector->GetAbsorSizeX();
+    G4double z = track->GetPosition().z() ;//+ 0.5*fDetector->GetAbsorSizeX();
     if(x > 0.0) fRunAction->AddProjRange(x);
+    G4double range = std::sqrt(x*x + y*y + z*z);
+    fRunAction->AddRange(range);
     G4AnalysisManager::Instance()->FillH1(3, x);
 
     G4double tl =  track->GetTrackLength();
