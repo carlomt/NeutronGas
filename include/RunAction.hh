@@ -60,6 +60,7 @@ public:
   inline void FillTallyEdep(G4int n, G4double e);
   inline void FillEdep(G4double de, G4double eni);
   inline void AddProjRange (G4double x);
+  inline void AddOrtRange (G4double x);
   inline void AddRange (G4double);
   inline void AddTotalRange (const G4double);
   inline void AddPrimaryStep();
@@ -74,6 +75,7 @@ private:
   PrimaryGeneratorAction* fKinematic;
   G4double*               fTallyEdep;   
   G4double                fProjRange, fProjRange2;
+  G4double                fOrtRange, fOrtRange2;
   G4double                fTRange, fTRange2;  
   G4double                fTotalRange, fTotalRange2;
   // G4double                fThisTotalRange;
@@ -105,6 +107,12 @@ inline void RunAction::AddProjRange (G4double x)
   fProjRange2 += x*x; 
   ++fRange;
 }
+
+inline void RunAction::AddOrtRange (G4double x) 
+{
+  fOrtRange  += x; 
+  fOrtRange2 += x*x; 
+ }
 
 inline void RunAction::AddRange (G4double x) 
 {

@@ -133,6 +133,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     fProjRange /= fRange; 
     fProjRange2 /= fRange;
 
+    fOrtRange /= fRange; 
+    fOrtRange2 /= fRange;
+
     fTRange /= fRange; 
     fTRange2 /= fRange;
     
@@ -142,6 +145,10 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double rms = fProjRange2 - fProjRange*fProjRange;        
   if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
   fProjRange -= fKinematic->GetInitialPosition().x();
+
+  G4double rms_ort = fOrtRange2 - fOrtRange*fOrtRange;        
+  if (rms_ort>0.) rms_ort = std::sqrt(rms_ort); else rms_ort = 0.;
+  fOrtRange -= fKinematic->GetInitialPosition().x();
 
   G4double rms_rt = fTRange2 - fTRange*fTRange;        
   if (rms_rt>0.) rms_rt = std::sqrt(rms_rt); else rms_rt = 0.;
@@ -154,7 +161,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout.precision(6);       
   G4cout << "\n Projected Range        = "<< G4BestUnit(fProjRange,"Length")
          << "   rms = "            << G4BestUnit( rms,"Length");
-  G4cout <<   "\n Range                = "<< G4BestUnit(fTRange,"Length")
+  G4cout << "\n Orthogonal Range       = "<< G4BestUnit(fOrtRange,"Length")
+         << "   rms = "            << G4BestUnit( rms_ort,"Length");
+  G4cout << "\n Range                  = "<< G4BestUnit(fTRange,"Length")
          << "   rms = "            << G4BestUnit( rms_rt,"Length");
 
   G4cout << "\n Track Length (with MS) = "<< G4BestUnit(fTotalRange,"Length")
