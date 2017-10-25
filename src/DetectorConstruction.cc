@@ -206,7 +206,7 @@ G4Material* DetectorConstruction::DefineMixture(const G4double pressure, const G
   G4double density     = ( rho_CF4*fraction_CF4 + rho_CHF3*fraction_CHF3 + rho_C4H10*fraction_C4H10 )
     *pressure/reference_pressure * reference_temperature/temperature;
   
-  G4Material* Mixture = new G4Material( "CF4-CHF3-C4H10", density, 3);
+  G4Material* Mixture = new G4Material( "CF4-CHF3-C4H10", density, 3, kStateGas, temperature, pressure);
   Mixture->AddMaterial(CF4,   fraction_CF4);
   Mixture->AddMaterial(CHF3,  fraction_CHF3);
   Mixture->AddMaterial(C4H10, fraction_C4H10);
