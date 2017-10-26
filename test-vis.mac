@@ -1,0 +1,14 @@
+/testem/det/setMixturePressure 50.e-3 bar
+/testem/det/setSizeX  20 cm
+/testem/det/setSizeYZ 20 cm
+/testem/det/tallyNumber 0
+/testem/phys/addPhysics  FTFP_BERT_EMY
+
+/run/initialize
+/run/setCut 0.01 mm
+
+/gun/particle ion
+/gun/ion 6 12 1
+
+/gun/energy 160 keV
+/run/beamOn 100

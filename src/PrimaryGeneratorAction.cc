@@ -92,6 +92,16 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       y0 = (2*G4UniformRand()-1.)*rbeam;
       z0 = (2*G4UniformRand()-1.)*rbeam;
     }
+  
+  G4double phi = G4UniformRand()*CLHEP::pi*2.;
+  G4double costheta = G4UniformRand()*2.-1.;
+  G4double theta = acos(costheta);
+  G4double xDirection = sin(theta)*cos(phi);
+  G4double yDirection = sin(theta)*sin(phi);
+  G4double zDirection = costheta;
+  const G4ThreeVector momentumDirection = G4ThreeVector(xDirection,yDirection,zDirection);
+  fParticleGun->SetParticleMomentumDirection(momentumDirection);
+  
   fParticleGun->SetParticlePosition(fInitialPosition);
   fParticleGun->GeneratePrimaryVertex(anEvent);
   
