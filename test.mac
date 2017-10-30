@@ -3,7 +3,7 @@
 #
 /control/verbose 2
 /run/verbose 2
-/tracking/verbose 0
+/tracking/verbose 2
 #
 #/testem/det/setSF6pressure 100 torr
 /testem/det/setMixturePressure 50.e-3 bar
@@ -13,9 +13,8 @@
 #
 /testem/det/tallyNumber 0
 #
-# /testem/phys/addPhysics  myemhad
-# /testem/phys/addPhysics  myem
-/testem/phys/addPhysics  FTFP_BERT_EMY
+# /testem/phys/addPhysics  FTFP_BERT_EMY
+/testem/phys/addPhysics  myemhad
 # /testem/phys/addPhysics  FTFP_BERT_EMZ
 # /testem/phys/addPhysics  FTFP_BERT_LIV
 # /testem/phys/addPhysics  FTFP_BERT_PEN  
@@ -26,35 +25,16 @@
 /gun/ion 6 12 1
 #
 # step limit
-/run/setCut 0.01 mm
+/run/setCut 0.1 um
 #
 /process/list
 #
-/analysis/setFileName C12_CF4-CHF3-C4H10_50e-3_bar_10keV
+/analysis/setFileName F18_SF6_100keV
 /analysis/h1/set 2 100 0 2 mm
 /analysis/h1/set 3 100 0 2 mm
-#/analysis/h2/set 0 100 -2 2 mm 100 -2 2 mm
 #
-/run/printProgress 1000
+/run/printProgress 10000
 #
-/gun/energy 10 keV
-/run/beamOn 10000
-#
-/gun/energy 30 keV
-/run/beamOn 10000
-#
-/gun/energy 40 keV
-/run/beamOn 10000
-#
-/gun/energy 50 keV
-/run/beamOn 10000
-#
-/gun/energy 80 keV
-/run/beamOn 10000
-#
-/gun/energy 120 keV
-/run/beamOn 10000
-#
-/gun/energy 160 keV
-/run/beamOn 10000
-#
+/gun/energy 100 keV
+/run/beamOn 1
+

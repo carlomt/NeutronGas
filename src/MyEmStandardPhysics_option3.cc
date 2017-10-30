@@ -227,7 +227,7 @@ void MyEmStandardPhysics_option3::ConstructProcess()
       G4eMultipleScattering* msc = new G4eMultipleScattering();
 
       G4eIonisation* eIoni = new G4eIonisation();
-      eIoni->SetStepFunction(0.2, 100*um);      
+      eIoni->SetStepFunction(0.2, 10*um);      
 
       G4eBremsstrahlung* brem = new G4eBremsstrahlung();
       G4SeltzerBergerModel* br1 = new G4SeltzerBergerModel();
@@ -249,7 +249,7 @@ void MyEmStandardPhysics_option3::ConstructProcess()
       G4eMultipleScattering* msc = new G4eMultipleScattering();
 
       G4eIonisation* eIoni = new G4eIonisation();
-      eIoni->SetStepFunction(0.2, 100*um);      
+      eIoni->SetStepFunction(0.2, 10*um);      
 
       G4eBremsstrahlung* brem = new G4eBremsstrahlung();
       G4SeltzerBergerModel* br1 = new G4SeltzerBergerModel();
@@ -295,7 +295,7 @@ void MyEmStandardPhysics_option3::ConstructProcess()
 
       G4ionIonisation* ionIoni = new G4ionIonisation();
       ionIoni->SetEmModel(new G4IonParametrisedLossModel());
-      ionIoni->SetStepFunction(0.001, 0.01*um);
+      ionIoni->SetStepFunction(0.001, 0.1*um);
 
       ph->RegisterProcess(hmsc, particle);
       ph->RegisterProcess(ionIoni, particle);
@@ -330,7 +330,7 @@ void MyEmStandardPhysics_option3::ConstructProcess()
 
       G4hMultipleScattering* pmsc = new G4hMultipleScattering();
       G4hIonisation* hIoni = new G4hIonisation();
-      hIoni->SetStepFunction(0.2, 50*um);
+      hIoni->SetStepFunction(0.2, 10*um);
 
       ph->RegisterProcess(pmsc, particle);
       ph->RegisterProcess(hIoni, particle);
