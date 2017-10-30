@@ -78,6 +78,7 @@
 
 #include "G4PhysListFactory.hh"
 #include "MyEmStandardPhysics_option3.hh"
+#include "MyEmStandardPhysics_option4.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -257,12 +258,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     fHadronPhys.push_back(new G4IonPhysics(verboseLevel));
     fBiciIsRegisted = true;
 
-  } else if (name == "myem") {
+  } else if (name == "myem3") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new MyEmStandardPhysics_option3(verboseLevel);
     
-  } else if (name == "myemhad") {
+  } else if (name == "myem3had") {
     G4PhysListFactory factory;
     G4VModularPhysicsList* phys =factory.GetReferencePhysList("FTFP_BERT");
     phys->SetVerboseLevel(verboseLevel);
@@ -280,7 +281,32 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     fEmPhysicsList = new MyEmStandardPhysics_option3(verboseLevel);
     phys->ReplacePhysics(fEmPhysicsList);
     AddIonGasModels();
-    G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(1*eV, 1*GeV);
+    G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(250*eV, 1*GeV);
+
+      } else if (name == "myem4") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new MyEmStandardPhysics_option4(verboseLevel);
+    
+  } else if (name == "myem4had") {
+    G4PhysListFactory factory;
+    G4VModularPhysicsList* phys =factory.GetReferencePhysList("FTFP_BERT");
+    phys->SetVerboseLevel(verboseLevel);
+    G4int i=0;
+    const G4VPhysicsConstructor* elem= phys->GetPhysics(i);
+    G4VPhysicsConstructor* tmp = const_cast<G4VPhysicsConstructor*> (elem);
+    while (elem !=0)
+      {
+	RegisterPhysics(tmp);
+	elem= phys->GetPhysics(++i) ;
+	tmp = const_cast<G4VPhysicsConstructor*> (elem);
+      }
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new MyEmStandardPhysics_option4(verboseLevel);
+    phys->ReplacePhysics(fEmPhysicsList);
+    AddIonGasModels();
+    G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(250*eV, 1*GeV);
       
   } else {
     G4PhysListFactory factory;
