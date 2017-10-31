@@ -64,7 +64,7 @@ int main(int argc,char** argv) {
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);
     
   //Construct the default run manager
-  G4RunManager * runManager = new G4RunManager;
+  G4RunManager* runManager = new G4RunManager;
 
   //set mandatory initialization classes
   //
@@ -80,24 +80,24 @@ int main(int argc,char** argv) {
   EventAction*            ev    = new EventAction();
   RunAction*              run   = new RunAction(det,phys,kin);
   TrackingAction*         track = new TrackingAction(det,run);
-  SteppingAction*         step  = new SteppingAction(det,run);
+  SteppingAction*         step  = new SteppingAction(det,run,ev);
   
   runManager->SetUserAction(kin);
-  runManager->SetUserAction(ev); 
-  runManager->SetUserAction(run); 
-  runManager->SetUserAction(track);  
-  runManager->SetUserAction(step);
+  // runManager->SetUserAction(ev); 
+  // runManager->SetUserAction(run); 
+  // runManager->SetUserAction(track);  
+  // runManager->SetUserAction(step);
 
 
   // Get the pointer to the User Interface manager
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  G4UImanager* UI = G4UImanager::GetUIpointer();
 
   if (argc!=1)
     {
       // batch mode
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UImanager->ApplyCommand(command+fileName);    
+      UI->ApplyCommand(command+fileName);    
     }
   else           //define visualization and UI terminal for interactive mode
     {
