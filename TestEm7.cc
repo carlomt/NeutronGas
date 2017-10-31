@@ -80,7 +80,7 @@ int main(int argc,char** argv) {
   EventAction*            ev    = new EventAction();
   RunAction*              run   = new RunAction(det,phys,kin);
   TrackingAction*         track = new TrackingAction(det,run);
-  SteppingAction*         step  = new SteppingAction(det,run,ev);
+  SteppingAction*         step  = new SteppingAction(det,run);
   
   runManager->SetUserAction(kin);
   runManager->SetUserAction(ev); 
