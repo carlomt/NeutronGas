@@ -280,7 +280,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete fEmPhysicsList;
     fEmPhysicsList = new MyEmStandardPhysics_option3(verboseLevel);
     phys->ReplacePhysics(fEmPhysicsList);
-    AddIonGasModels();
+    //    AddIonGasModels();
     G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(250*eV, 1*GeV);
 
       } else if (name == "myem4") {
@@ -305,7 +305,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete fEmPhysicsList;
     fEmPhysicsList = new MyEmStandardPhysics_option4(verboseLevel);
     phys->ReplacePhysics(fEmPhysicsList);
-    AddIonGasModels();
+    //    AddIonGasModels();
     G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(250*eV, 1*GeV);
       
   } else {
@@ -323,6 +323,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
 	   << " via G4PhysListFactory"
 	   << G4endl;
+    G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(250*eV, 1*GeV);
   }
 }
 
