@@ -43,8 +43,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* RuAct, EventAction* EvAct)
-  :G4UserSteppingAction(),fDetector(det), fRunAction(RuAct), fEventAction(EvAct)
+SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* RuAct)
+  :G4UserSteppingAction(),fDetector(det), fRunAction(RuAct)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
