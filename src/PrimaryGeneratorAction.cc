@@ -84,23 +84,23 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   fInitialPosition = G4ThreeVector(x0,y0,z0);
   //randomize the beam, if requested.
   //
-  if (fRndmBeam > 0.) 
-    {
-      if (fRndmBeam > fDetector->GetAbsorSizeYZ())
-        fRndmBeam = fDetector->GetAbsorSizeYZ(); 
-      G4double rbeam = 0.5*fRndmBeam;
-      y0 = (2*G4UniformRand()-1.)*rbeam;
-      z0 = (2*G4UniformRand()-1.)*rbeam;
-    }
+  // if (fRndmBeam > 0.) 
+  //   {
+  //     if (fRndmBeam > fDetector->GetAbsorSizeYZ())
+  //       fRndmBeam = fDetector->GetAbsorSizeYZ(); 
+  //     G4double rbeam = 0.5*fRndmBeam;
+  //     y0 = (2*G4UniformRand()-1.)*rbeam;
+  //     z0 = (2*G4UniformRand()-1.)*rbeam;
+  //   }
   
-  G4double phi = G4UniformRand()*CLHEP::pi*2.;
-  G4double costheta = G4UniformRand()*2.-1.;
-  G4double theta = acos(costheta);
-  G4double xDirection = sin(theta)*cos(phi);
-  G4double yDirection = sin(theta)*sin(phi);
-  G4double zDirection = costheta;
-  const G4ThreeVector momentumDirection = G4ThreeVector(xDirection,yDirection,zDirection);
-  fParticleGun->SetParticleMomentumDirection(momentumDirection);
+  // G4double phi = G4UniformRand()*CLHEP::pi*2.;
+  // G4double costheta = G4UniformRand()*2.-1.;
+  // G4double theta = acos(costheta);
+  // G4double xDirection = sin(theta)*cos(phi);
+  // G4double yDirection = sin(theta)*sin(phi);
+  // G4double zDirection = costheta;
+  // const G4ThreeVector momentumDirection = G4ThreeVector(xDirection,yDirection,zDirection);
+  // fParticleGun->SetParticleMomentumDirection(momentumDirection);
   
   fParticleGun->SetParticlePosition(fInitialPosition);
   fParticleGun->GeneratePrimaryVertex(anEvent);
