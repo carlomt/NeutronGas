@@ -3,7 +3,7 @@
 #
 /control/verbose 2
 /run/verbose 2
-/tracking/verbose 2
+/tracking/verbose 0
 #
 #/testem/det/setSF6pressure 100 torr
 /testem/det/setMixturePressure 50.e-3 bar
@@ -14,7 +14,8 @@
 /testem/det/tallyNumber 0
 #
 # /testem/phys/addPhysics  FTFP_BERT_EMY
-/testem/phys/addPhysics  myemhad
+#/testem/phys/addPhysics  myem4had
+/testem/phys/addPhysics  myem3had
 # /testem/phys/addPhysics  FTFP_BERT_EMZ
 # /testem/phys/addPhysics  FTFP_BERT_LIV
 # /testem/phys/addPhysics  FTFP_BERT_PEN  

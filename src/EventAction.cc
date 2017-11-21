@@ -34,6 +34,8 @@
 #include "G4UnitsTable.hh" 
 #include "globals.hh"
 
+#include "g4root.hh"
+
 EventAction::EventAction()
   : G4UserEventAction(),
     fTotalPrimaryTrackLength(0.)
@@ -46,6 +48,19 @@ EventAction::~EventAction()
 void EventAction::BeginOfEventAction(const G4Event*)
 {
     fTotalPrimaryTrackLength = 0.;
+
+    auto AnalysisManager = G4AnalysisManager::Instance();
+
+    // Default values (to be reset via /analysis/h1/set command)               
+    // G4int nbins = 100;
+    // G4double vmin = 0.;
+    // G4double vmax = 100.;
+    
+    // G4int ih = AnalysisManager->CreateH2("h", "Edep (MeV/mm^2) transverse plane",
+    // 					  nbins, vmin, vmax,
+    // 					  nbins, vmin, vmax );
+    // G4cout << "2d histo id: "<< ih <<G4endl;
+    // AnalysisManager->SetH2Activation(ih, true);
 }
 
 void EventAction::EndOfEventAction(const G4Event*)

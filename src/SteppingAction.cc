@@ -43,8 +43,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* RuAct)
-  :G4UserSteppingAction(),fDetector(det), fRunAction(RuAct)
+SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* RuAct, EventAction* EvAct)
+  :G4UserSteppingAction(),fDetector(det), fRunAction(RuAct), fEventAction(EvAct)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -99,7 +99,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   G4double y2 = postPoint->GetPosition().y();//+ ymax*0.5;
   G4double z1 = prePoint->GetPosition().z() ;//+ zmax*0.5;
   G4double z2 = postPoint->GetPosition().z();//+ zmax*0.5;
-  if(x1 >= 0.0 && x2 <= xmax)
+  // if(x1 >= 0.0 && x2 <= xmax)
     {  
       G4double x  = x1 + G4UniformRand()*(x2-x1);
       G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
@@ -108,11 +108,12 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
 
       // if (step->GetTrack()->GetTrackID() == 1)
       // 	{
-      if((y1 >= 0.0 && y2 <= ymax) && (z1 >= 0.0 && z2 <= zmax))
+      // if((y1 >= 0.0 && y2 <= ymax) && (z1 >= 0.0 && z2 <= zmax))
       	{
 	  G4double y  = y1 + G4UniformRand()*(y2-y1);
-	  G4double z  = z1 + G4UniformRand()*(z2-z1);	  
-	  analysisManager->FillH2(0, y, z, edep);
+	  G4double z  = z1 + G4UniformRand()*(z2-z1);
+	  analysisManager->FillH2(0, y1/CLHEP::mm, z1/CLHEP::mm, edep/CLHEP::keV);
+	  analysisManager->FillH2(1, x1/CLHEP::mm, y1/CLHEP::mm, edep/CLHEP::keV);
       // 	  G4double dx  = (x2-x1);
       // 	  G4double dy  = (y2-y1);
       // 	  G4double dz  = (z2-z1);

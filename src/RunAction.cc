@@ -219,9 +219,10 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     }
     fAnalysisManager->ScaleH1(3, 1./nbofEvents);
 
-    G4double binWidth = fAnalysisManager->GetH2XWidth(0) * fAnalysisManager->GetH2YWidth(0);
-    G4double fac = (mm*mm/MeV)/(nbofEvents * binWidth);
-    fAnalysisManager->ScaleH2(0, fac);
+    // G4double binWidth = fAnalysisManager->GetH2XWidth(0) * fAnalysisManager->GetH2YWidth(0);
+    // G4double fac = (mm*mm/keV)/(nbofEvents * binWidth);
+    // fAnalysisManager->ScaleH2(0, fac);
+    // fAnalysisManager->ScaleH2(1, fac);
     
     // save histograms
     fAnalysisManager->Write();
@@ -270,9 +271,15 @@ void RunAction::BookHisto()
     if (k == 1) activ = true;
     fAnalysisManager->SetH1Activation(ih, activ);
   }
-  G4int ih = fAnalysisManager->CreateH2("h4", "Edep (MeV/mm^2) transverse plane",
-					nbins, vmin, vmax,
-					nbins, vmin, vmax );
+  G4int ih = fAnalysisManager->CreateH2("h4", "Edep transverse plane",
+  					2*100+1, -100.5, 100.5,
+  					2*100+1, -100.5, 100.5 );
+  G4cout << "2d histo id: "<< ih <<G4endl;
+  fAnalysisManager->SetH2Activation(ih, true);
+
+  ih = fAnalysisManager->CreateH2("h5", "Edep parallel plane",
+  					101, -0.5, 100.5,
+  					2*100+1, -100.5, 100.5 );
   G4cout << "2d histo id: "<< ih <<G4endl;
   fAnalysisManager->SetH2Activation(ih, true);
 }

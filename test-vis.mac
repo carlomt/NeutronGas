@@ -4,15 +4,19 @@
 /testem/det/tallyNumber 0
 #/testem/phys/addPhysics  FTFP_BERT_EMY
 #/testem/phys/addPhysics  myemhad
-/testem/phys/addPhysics ionGasModels
+#/testem/phys/addPhysics ionGasModels
+/testem/phys/addPhysics  FTFP_BERT_EMY
 
 /tracking/verbose 0
 
 /run/initialize
-/run/setCut 0.01 mm
+
+# step limit
+/run/setCut 10 um
+/testem/stepMax 100 um
 
 /gun/particle ion
 /gun/ion 6 12 1
 
-/gun/energy 160 keV
+/gun/energy 10 keV
 /run/beamOn 1

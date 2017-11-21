@@ -77,16 +77,16 @@ int main(int argc,char** argv) {
   //set user action classes
   //
   PrimaryGeneratorAction* kin   = new PrimaryGeneratorAction(det);
-  EventAction*            ev    = new EventAction();
   RunAction*              run   = new RunAction(det,phys,kin);
+  EventAction*            ev    = new EventAction();
   TrackingAction*         track = new TrackingAction(det,run);
   SteppingAction*         step  = new SteppingAction(det,run,ev);
   
   runManager->SetUserAction(kin);
-  // runManager->SetUserAction(ev); 
-  // runManager->SetUserAction(run); 
-  // runManager->SetUserAction(track);  
-  // runManager->SetUserAction(step);
+  runManager->SetUserAction(ev); 
+  runManager->SetUserAction(run); 
+  runManager->SetUserAction(track);  
+  runManager->SetUserAction(step);
 
 
   // Get the pointer to the User Interface manager
@@ -108,6 +108,7 @@ int main(int argc,char** argv) {
       
 #ifdef G4UI_USE
       G4UIExecutive * ui = new G4UIExecutive(argc,argv);
+      UI->ApplyCommand("/control/execute vis.mac");
       ui->SessionStart();
       delete ui;
 #endif
