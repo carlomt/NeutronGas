@@ -1,0 +1,47 @@
+# Macro file for "TestEm7.cc"
+# (can be run in batch, without graphic)
+#
+/control/verbose 2
+/run/verbose 2
+/tracking/verbose 2
+#
+/testem/det/setHeCF4pressure 1 atm
+#
+/testem/det/setSizeX  20 cm
+/testem/det/setSizeYZ 20 cm
+#
+/testem/det/tallyNumber 0
+#
+# /testem/phys/addPhysics  myem3had
+# /testem/phys/addPhysics  myem4had
+#/testem/phys/addPhysics  FTFP_BERT_EMY
+# /testem/phys/addPhysics  QGSP_BIC_AllHP_EMY
+/testem/phys/addPhysics QGSP_BIC_HP_EMY
+# /testem/phys/addPhysics  FTFP_BERT_EMZ
+# /testem/phys/addPhysics  FTFP_BERT_LIV
+# /testem/phys/addPhysics  FTFP_BERT_PEN  
+#
+/run/initialize
+#
+/gun/particle neutron
+#
+# step limit
+/run/setCut 10 um
+/testem/stepMax 100 um
+#
+/process/list
+#
+/analysis/setFileName n5MeV
+/analysis/h1/set 2 100 0 2 mm
+/analysis/h1/set 3 100 0 2 mm
+#
+/analysis/h2/setX 0 201 -3.5 3.5 mm
+/analysis/h2/setY 0 201 -3.5 3.5 mm
+#
+/analysis/h2/setX 1 101 -0.5 10.5 mm
+/analysis/h2/setY 1 201 -3.5 3.5 mm 
+#
+/run/printProgress 10000
+#
+/gun/energy 5 MeV
+/run/beamOn 10000
