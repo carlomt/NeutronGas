@@ -50,6 +50,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
  fDetDir(nullptr),    
  fMaterCmd(nullptr),
  fSF6Cmd(nullptr),
+ fHeCF4Cmd(nullptr),
  fMixtCmd(nullptr),
  fWMaterCmd(nullptr),
  fSizeXCmd(nullptr),
@@ -77,6 +78,13 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fSF6Cmd->SetUnitCategory("Pressure");
   fSF6Cmd->AvailableForStates(G4State_PreInit);
 
+  fHeCF4Cmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setHeCF4pressure",this);
+  fHeCF4Cmd->SetGuidance("Set HeCF4 and its pressure.");
+  fHeCF4Cmd->SetParameterName("pressure",false);
+  fHeCF4Cmd->SetRange("pressure>0.");
+  fHeCF4Cmd->SetUnitCategory("Pressure");
+  fHeCF4Cmd->AvailableForStates(G4State_PreInit);
+  
   fMixtCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setMixturePressure",this);
   fMixtCmd->SetGuidance("Set mixture gas and its pressure.");
   fMixtCmd->SetParameterName("pressure",false);
@@ -187,6 +195,7 @@ DetectorMessenger::~DetectorMessenger()
 {
   delete fMaterCmd;
   delete fSF6Cmd;
+  delete fHeCF4Cmd;  
   delete fMixtCmd;
   delete fWMaterCmd;
   delete fSizeXCmd;
@@ -245,6 +254,10 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if (command == fSF6Cmd)
     {
       fDetector->DefineSF6(fSF6Cmd->GetNewDoubleValue(newValue));
+    }
+  if (command == fHeCF4Cmd)
+    {
+      fDetector->DefineHeCF4(fHeCF4Cmd->GetNewDoubleValue(newValue));
     }
   if (command == fMixtCmd)
     {
