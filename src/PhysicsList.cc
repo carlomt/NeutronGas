@@ -80,6 +80,10 @@
 #include "MyEmStandardPhysics_option3.hh"
 #include "MyEmStandardPhysics_option4.hh"
 
+#include "G4NeutronHPElastic.hh"
+#include "G4HadronElasticProcess.hh"
+#include "G4HadronElasticPhysicsHP.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList() : G4VModularPhysicsList(),
@@ -246,9 +250,33 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     fHadronPhys.push_back( new G4HadronDElasticPhysics(verboseLevel));
     fHelIsRegisted = true;
 
+  } else if (name == "HPElastic" && !fHelIsRegisted) {
+    fHadronPhys.push_back( new G4HadronElasticPhysicsHP());
+    fHelIsRegisted = true;
+    
   } else if (name == "HElastic" && !fHelIsRegisted) {
     fHadronPhys.push_back( new G4HadronHElasticPhysics(verboseLevel));
     fHelIsRegisted = true;
+
+  // } else if (name == "NElastic" && !fHelIsRegisted) {
+  //   G4NeutronHPElastic* elasticModel = new G4NeutronHPElastic();
+  //   G4HadronElasticProcess* elProcess = new G4HadronElasticProcess();
+  // auto particleIterator=GetParticleIterator();
+  // particleIterator->reset();
+  // while ((*particleIterator)()){
+  //   G4ParticleDefinition* particle = particleIterator->value();
+  //   G4ProcessManager* pmanager = particle->GetProcessManager();
+
+  //   if (fStepMaxProcess->IsApplicable(*particle) && pmanager)
+  //     {
+  //       pmanager ->AddDiscreteProcess(fStepMaxProcess);
+  //     }
+  // }
+    
+  //   elProcess->RegisterMe(elasticModel);
+  //   processManager->AddDiscreteProcess(elProcess);
+    
+  //   fHelIsRegisted = true;
 
   } else if (name == "binary" && !fBicIsRegisted) {
     fHadronPhys.push_back(new G4HadronInelasticQBBC(verboseLevel));
