@@ -54,7 +54,7 @@ RunAction::RunAction(DetectorConstruction* det, PhysicsList* phys,
  : G4UserRunAction(),
    fAnalysisManager(0), fDetector(det), fPhysics(phys), fKinematic(kin),
    fTallyEdep(new G4double[kMaxTally]), fProjRange(0.), fProjRange2(0.),
-   fTotalRange(0), fTotalRange2(0),
+   fTotalRange(0), fTotalRange2(0),fOrtRange(0.),fTRange(0.),
    fEdeptot(0.), fEniel(0.), fNbPrimarySteps(0), fRange(0)
 { 
   // Book predefined histograms

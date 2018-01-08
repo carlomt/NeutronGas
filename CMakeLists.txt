@@ -39,11 +39,22 @@ target_link_libraries(TestEm7 ${Geant4_LIBRARIES} )
 # build TestEm7. This is so that we can run the executable directly because it
 # relies on these scripts being in the current working directory.
 #
-set(TestEm7_SCRIPTS
-  TestEm7.in vis.mac F18-1.mac plotHisto.C plot.gp pres.txt 
+file(GLOB TestEm7_SCRIPTS ${PROJECT_SOURCE_DIR}/*.mac)
+
+set(TestEm7_PLOT_SCRIPTS
+  TestEm7.in plotHisto.C plot.gp pres.txt 
   )
 
 foreach(_script ${TestEm7_SCRIPTS})
+  get_filename_component(barename ${_script} NAME)
+  configure_file(
+    ${_script}
+    ${PROJECT_BINARY_DIR}/${barename}
+    COPYONLY
+    )
+endforeach()
+
+foreach(_script ${TestEm7_PLOT_SCRIPTS})
   configure_file(
     ${PROJECT_SOURCE_DIR}/${_script}
     ${PROJECT_BINARY_DIR}/${_script}
