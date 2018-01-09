@@ -7,7 +7,7 @@
 #
 /testem/det/setHeCF4pressure 1 atm
 #
-/testem/det/setSizeX  20 cm
+/testem/det/setSizeX  200 cm
 /testem/det/setSizeYZ 20 cm
 #
 /testem/det/tallyNumber 0
@@ -50,4 +50,4 @@
 /run/printProgress 10000
 #
 /gun/energy 5 MeV
-/run/beamOn 10000
+/run/beamOn 1000
