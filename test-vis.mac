@@ -1,22 +1,29 @@
-/testem/det/setMixturePressure 50.e-3 bar
+#/testem/det/setMixturePressure 50.e-3 bar
+/testem/det/setHeCF4pressure 1 atm
 /testem/det/setSizeX  20 cm
 /testem/det/setSizeYZ 20 cm
 /testem/det/tallyNumber 0
 #/testem/phys/addPhysics  FTFP_BERT_EMY
 #/testem/phys/addPhysics  myemhad
 #/testem/phys/addPhysics ionGasModels
-/testem/phys/addPhysics  FTFP_BERT_EMY
+#/testem/phys/addPhysics  FTFP_BERT_EMY
+#/testem/phys/addPhysics QGSP_BIC_HP_EMY
+#/testem/phys/addPhysics QGSP_BERT_HP_EMY
+/testem/phys/addPhysics Shielding
 
 /tracking/verbose 0
 
 /run/initialize
 
 # step limit
-/run/setCut 10 um
-/testem/stepMax 100 um
+# /run/setCut 10 um
+# /testem/stepMax 100 um
 
-/gun/particle ion
-/gun/ion 6 12 1
+# /gun/particle ion
+# /gun/ion 6 12 1
+/gun/particle neutron
 
-/gun/energy 10 keV
+#/gun/energy 10 keV
+/gun/energy 5 MeV
+
 /run/beamOn 1
