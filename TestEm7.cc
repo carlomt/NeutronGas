@@ -31,7 +31,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
@@ -44,6 +49,7 @@
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
 #include "EventAction.hh"
+#include "ActionInitialization.hh"
 
 #ifdef G4VIS_USE
  #include "G4VisExecutive.hh"
@@ -53,6 +59,12 @@
  #include "G4UIExecutive.hh"
 #endif
 
+#ifndef __WITHOUT_ROOT__
+#include "TreeManager.hh"
+#endif
+
+#include "StepMax.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 int main(int argc,char** argv) {
@@ -60,12 +72,22 @@ int main(int argc,char** argv) {
   // Choose the Random engine
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
   
+  // Construct the default run manager
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager;
+  G4int nThreads = G4Threading::G4GetNumberOfCores();
+  if (argc==3) nThreads = G4UIcommand::ConvertToInt(argv[2]);
+  runManager->SetNumberOfThreads(nThreads);  
+#else
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);
-    
-  //Construct the default run manager
   G4RunManager* runManager = new G4RunManager;
+#endif
 
+#ifndef __WITHOUT_ROOT__  
+  TreeManager *treeManager=TreeManager::Instance();
+#endif  
+  
   //set mandatory initialization classes
   //
   DetectorConstruction*   det  = new DetectorConstruction();
@@ -73,21 +95,25 @@ int main(int argc,char** argv) {
   
   runManager->SetUserInitialization(det);
   runManager->SetUserInitialization(phys);
-  
-  //set user action classes
-  //
-  PrimaryGeneratorAction* kin   = new PrimaryGeneratorAction(det);
-  RunAction*              run   = new RunAction(det,phys,kin);
-  EventAction*            ev    = new EventAction();
-  TrackingAction*         track = new TrackingAction(det,run);
-  SteppingAction*         step  = new SteppingAction(det,run,ev);
-  
-  runManager->SetUserAction(kin);
-  runManager->SetUserAction(ev); 
-  runManager->SetUserAction(run); 
-  runManager->SetUserAction(track);  
-  runManager->SetUserAction(step);
 
+  runManager->SetUserInitialization(new ActionInitialization(det));    
+  
+  // //set user action classes
+  // //
+  // PrimaryGeneratorAction* kin   = new PrimaryGeneratorAction(det);
+  // RunAction*              run   = new RunAction(det,phys,kin);
+  // EventAction*            ev    = new EventAction();
+  // TrackingAction*         track = new TrackingAction(det,run);
+  // SteppingAction*         step  = new SteppingAction(det,run,ev);
+  
+  // runManager->SetUserAction(kin);
+  // runManager->SetUserAction(ev); 
+  // runManager->SetUserAction(run); 
+  // runManager->SetUserAction(track);  
+  // runManager->SetUserAction(step);
+
+  // G4double stepMax = phys->GetStepMaxProcess()->GetMaxStep();
+  // G4cout << " max step: " << stepMax/CLHEP::mm << G4endl;
 
   // Get the pointer to the User Interface manager
   G4UImanager* UI = G4UImanager::GetUIpointer();

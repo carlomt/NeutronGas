@@ -23,65 +23,66 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm7/src/TrackingAction.cc
-/// \brief Implementation of the TrackingAction class
+// $Id: ActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
 //
-// $Id: TrackingAction.cc 67268 2013-02-13 11:38:40Z ihrivnac $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file ActionInitialization.cc
+/// \brief Implementation of the ActionInitialization class
 
-#include "TrackingAction.hh"
-#include "DetectorConstruction.hh"
+#include "ActionInitialization.hh"
+#include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
-#include "G4Track.hh"
-#include "G4UnitsTable.hh"
-#include "G4ios.hh"
+#include "SteppingAction.hh"
+#include "SteppingVerbose.hh"
+#include "EventAction.hh"
+#include "TrackingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(DetectorConstruction* det, RunAction* run)
-:G4UserTrackingAction(),fDetector(det), fRunAction(run)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-TrackingAction::~TrackingAction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void TrackingAction::PostUserTrackingAction(const G4Track* track)
+ActionInitialization::ActionInitialization(DetectorConstruction* detector)
+ : G4VUserActionInitialization(),
+   fDetector(detector),
+   fPrimary(NULL)
 {
-  // // extract Projected Range of primary particle
-  // if (track->GetTrackID() == 1) {
-  //   G4double x = track->GetPosition().x() ;//+ 0.5*fDetector->GetAbsorSizeX();
-  //   G4double y = track->GetPosition().y() ;//+ 0.5*fDetector->GetAbsorSizeX();
-  //   G4double z = track->GetPosition().z() ;//+ 0.5*fDetector->GetAbsorSizeX();
-  //   if(x > 0.0) fRunAction->AddProjRange(x);
-  //   fRunAction->AddOrtRange(std::sqrt(y*y + z*z));
-  //   G4double range = std::sqrt(x*x + y*y + z*z);
-  //   fRunAction->AddRange(range);
-  //   // G4AnalysisManager::Instance()->FillH1(3, x);
-
-  //   G4double tl =  track->GetTrackLength();
-    
-  //   // G4cout << "TrackingAction::PostUserTrackingAction track length "
-  //   // 	   << tl/CLHEP::mm << " mm"  << G4endl;
-    
-    
-  //   // fRunAction->AddTotalRange(track->GetTrackLength());
-  //   // G4double y = track->GetPosition().y();
-  //   // G4double z = track->GetPosition().z();    
-  //   // G4double s = x*x + y*y + z*z;
-  //   // if (s>0.)
-  //   //   {
-  //   // 	s = std::sqrt(s);
-  //   // 	fRunAction->AddTotalRange(s);
-  //   //   }
-  //   fRunAction->AddTotalRange(tl);
-  // }  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+ActionInitialization::~ActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ActionInitialization::BuildForMaster() const
+{
+  RunAction* runAction = new RunAction(fDetector);
+  SetUserAction(runAction);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ActionInitialization::Build() const
+{
+  PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(fDetector);
+  SetUserAction(primary);
+    
+  RunAction* runAction = new RunAction(fDetector);
+  SetUserAction(runAction);
+
+  EventAction* eventAction = new EventAction();
+  SetUserAction(eventAction);
+
+  // TrackingAction* trackingAction = new TrackingAction(fDetector, runAction);
+  // SetUserAction(trackingAction);
+  
+  SteppingAction* steppingAction = new SteppingAction(fDetector, runAction, eventAction);
+  SetUserAction(steppingAction);
+}  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4VSteppingVerbose* ActionInitialization::InitializeSteppingVerbose() const
+{
+  return new SteppingVerbose();
+}  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

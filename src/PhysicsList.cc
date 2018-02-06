@@ -110,12 +110,19 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList(),
 
 PhysicsList::~PhysicsList()
 {
-  G4cout << "PhysicsList::~PhysicsList() start" << G4endl;
-  delete fMessenger;
-  delete fEmPhysicsList;
-  delete fDecPhysicsList;
-  for(size_t i=0; i<fHadronPhys.size(); i++) {delete fHadronPhys[i];}
-  G4cout << "PhysicsList::~PhysicsList() end" << G4endl;
+  // G4cout << "PhysicsList::~PhysicsList() start" << G4endl;
+  if(fMessenger)
+    delete fMessenger;
+  // if(fEmPhysicsList)
+  //   delete fEmPhysicsList;
+  // if(fDecPhysicsList)
+  //   delete fDecPhysicsList;
+  // for(size_t i=0; i<fHadronPhys.size(); i++)
+  //   {
+  //     if(fHadronPhys[i])
+  // 	delete fHadronPhys[i];
+  //   }
+  // G4cout << "PhysicsList::~PhysicsList() end" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

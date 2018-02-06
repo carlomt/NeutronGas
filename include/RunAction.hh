@@ -40,8 +40,8 @@
 //#include "g4xml.hh"
 
 class DetectorConstruction;
-class PhysicsList;
-class PrimaryGeneratorAction;
+// class PhysicsList;
+// class PrimaryGeneratorAction;
 
 class G4Run;
 
@@ -51,7 +51,7 @@ class RunAction : public G4UserRunAction
 {
 public:
 
-  RunAction(DetectorConstruction*, PhysicsList*, PrimaryGeneratorAction*);
+  RunAction(DetectorConstruction*);
   virtual ~RunAction();
 
   virtual void BeginOfRunAction(const G4Run*);
@@ -71,8 +71,6 @@ private:
 
   G4AnalysisManager*      fAnalysisManager;
   DetectorConstruction*   fDetector;
-  PhysicsList*            fPhysics;
-  PrimaryGeneratorAction* fKinematic;
   G4double*               fTallyEdep;   
   G4double                fProjRange, fProjRange2;
   G4double                fOrtRange, fOrtRange2;

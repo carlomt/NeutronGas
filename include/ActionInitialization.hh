@@ -23,51 +23,39 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: ActionInitialization.hh 68058 2013-03-13 14:47:43Z gcosmo $
 //
-// $Id: EventAction.cc 66892 2013-01-17 10:57:59Z gunter $
-//
+/// \file ActionInitialization.hh
+/// \brief Definition of the ActionInitialization class
 
-#include "EventAction.hh"
-#include "G4Event.hh"
-#include "G4EventManager.hh"
-#include "G4ParticleTable.hh"
-#include "G4UnitsTable.hh" 
-#include "globals.hh"
+#ifndef ActionInitialization_h
+#define ActionInitialization_h 1
 
-#include "g4root.hh"
+#include "G4VUserActionInitialization.hh"
 
-EventAction::EventAction()
-  : G4UserEventAction(),
-    fTotalPrimaryTrackLength(0.)
+class DetectorConstruction;
+class G4VSteppingVerbose;
+class PrimaryGeneratorAction;
+
+/// Action initialization class.
+///
+
+class ActionInitialization : public G4VUserActionInitialization
 {
-}
+  public:
+    ActionInitialization(DetectorConstruction* detector);
+    virtual ~ActionInitialization();
 
-EventAction::~EventAction()
-{;}
-
-void EventAction::BeginOfEventAction(const G4Event*)
-{
-    fTotalPrimaryTrackLength = 0.;
-
-    // auto AnalysisManager = G4AnalysisManager::Instance();
-
-    // Default values (to be reset via /analysis/h1/set command)               
-    // G4int nbins = 100;
-    // G4double vmin = 0.;
-    // G4double vmax = 100.;
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
     
-    // G4int ih = AnalysisManager->CreateH2("h", "Edep (MeV/mm^2) transverse plane",
-    // 					  nbins, vmin, vmax,
-    // 					  nbins, vmin, vmax );
-    // G4cout << "2d histo id: "<< ih <<G4endl;
-    // AnalysisManager->SetH2Activation(ih, true);
-}
+    virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
+   
+  private:
+    DetectorConstruction* fDetector;
+    PrimaryGeneratorAction* fPrimary;
+};
 
-void EventAction::EndOfEventAction(const G4Event*)
-{
-  // auto eventID = event->GetEventID();
-  // G4cout << "---> End of event: " << eventID << G4endl;
-  // G4cout << "EventAction::EndOfEventAction total track length: \t"
-  // 	 << fTotalPrimaryTrackLength/CLHEP::mm << " mm" << G4endl;
-}
+#endif
 
+    

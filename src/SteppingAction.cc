@@ -41,6 +41,13 @@
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
 
+#include "g4root.hh"
+#include "G4Ions.hh"
+
+#ifndef __WITHOUT_ROOT__
+#include "TreeManager.hh"
+#endif
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* RuAct, EventAction* EvAct)
@@ -56,20 +63,21 @@ SteppingAction::~SteppingAction()
 
 void SteppingAction::UserSteppingAction(const G4Step* step)
 {
-  G4double edep = step->GetTotalEnergyDeposit();
-  if (edep <= 0.) return;
+  
+  // G4double edep = step->GetTotalEnergyDeposit();
+  // if (edep <= 0.) return;
 
   G4StepPoint* prePoint  = step->GetPreStepPoint();
   G4StepPoint* postPoint = step->GetPostStepPoint();
 
-  G4int copyNb = prePoint->GetTouchableHandle()->GetCopyNumber();
-  if (copyNb > 0) { fRunAction->FillTallyEdep(copyNb-1, edep); }
+  // G4int copyNb = prePoint->GetTouchableHandle()->GetCopyNumber();
+  // if (copyNb > 0) { fRunAction->FillTallyEdep(copyNb-1, edep); }
 
-  G4double niel = step->GetNonIonizingEnergyDeposit();
-  fRunAction->FillEdep(edep, niel);
+  // G4double niel = step->GetNonIonizingEnergyDeposit();
+  // fRunAction->FillEdep(edep, niel);
   
-  if (step->GetTrack()->GetTrackID() == 1) {
-    fRunAction->AddPrimaryStep();
+  // if (step->GetTrack()->GetTrackID() == 1) {
+  //   fRunAction->AddPrimaryStep();
     /*
     G4cout << step->GetTrack()->GetMaterial()->GetName()
            << "  E1= " << step->GetPreStepPoint()->GetKineticEnergy()
@@ -85,7 +93,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
 
     // fRunAction->AddThisTotalRange(step->GetStepLength());
     // fEventAction->AddPrimaryTrackLength(step->GetStepLength());
-  } 
+  // } 
 
   //Bragg curve
   //        
@@ -102,9 +110,9 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   // if(x1 >= 0.0 && x2 <= xmax)
     {  
       G4double x  = x1 + G4UniformRand()*(x2-x1);
-      G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-      analysisManager->FillH1(1, x, edep);  
-      analysisManager->FillH1(2, x, edep);
+      // G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+      // analysisManager->FillH1(1, x, edep);  
+      // analysisManager->FillH1(2, x, edep);
 
       // if (step->GetTrack()->GetTrackID() == 1)
       // 	{
@@ -112,8 +120,8 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
       	{
 	  G4double y  = y1 + G4UniformRand()*(y2-y1);
 	  G4double z  = z1 + G4UniformRand()*(z2-z1);
-	  analysisManager->FillH2(0, y1/CLHEP::mm, z1/CLHEP::mm, edep/CLHEP::keV);
-	  analysisManager->FillH2(1, x1/CLHEP::mm, y1/CLHEP::mm, edep/CLHEP::keV);
+	  // analysisManager->FillH2(0, y1/CLHEP::mm, z1/CLHEP::mm, edep/CLHEP::keV);
+	  // analysisManager->FillH2(1, x1/CLHEP::mm, y1/CLHEP::mm, edep/CLHEP::keV);
       // 	  G4double dx  = (x2-x1);
       // 	  G4double dy  = (y2-y1);
       // 	  G4double dz  = (z2-z1);
@@ -126,6 +134,43 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
       // 	}
 	}
     }
+
+    //secondaries
+    //
+    const std::vector<const G4Track*>* secondary = step->GetSecondaryInCurrentStep();
+    for (size_t lp=0; lp<(*secondary).size(); lp++)
+      {
+	const G4Track* thisTrack = (*secondary)[lp];
+	G4ParticleDefinition* particle = thisTrack->GetDefinition();
+	G4int trackID =  thisTrack->GetTrackID();
+	G4int parentID = thisTrack->GetParentID();
+	G4String name   = particle->GetParticleName();
+	G4String type   = particle->GetParticleType();
+	G4double energy = (*secondary)[lp]->GetKineticEnergy()/CLHEP::MeV;
+	G4int A = particle->GetAtomicMass();
+	G4int Z =  particle->GetAtomicNumber();
+	G4LorentzVector fourMomentum((*secondary)[lp]->GetMomentum(), (*secondary)[lp]->GetTotalEnergy());
+	G4double px = fourMomentum.x();
+	G4double py = fourMomentum.y();
+	G4double pz = fourMomentum.z();
+	if (type == "nucleus")
+        {
+	    G4double ExcitationE = ((G4Ions*)particle)->GetExcitationEnergy()/CLHEP::eV;
+        }
+	// G4AnalysisManager* man = G4AnalysisManager::Instance();
+	// man->FillNtupleIColumn(0, trackID);
+	// man->FillNtupleIColumn(1, parentID);
+	// man->FillNtupleIColumn(2, -99);
+	// man->FillNtupleDColumn(3, energy);
+	// man->AddNtupleRow();
+#ifndef __WITHOUT_ROOT__
+	TreeManager* treeManager = TreeManager::Instance();
+	treeManager->trackID = trackID;
+	treeManager->parentID = parentID;
+	treeManager->Ek = energy;
+	treeManager->Fill();
+#endif
+       }//end loop on secondaries
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
