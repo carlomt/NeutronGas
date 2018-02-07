@@ -1,7 +1,7 @@
 #----------------------------------------------------------------------------
 # Setup the project
 cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
-project(TestEm7)
+project(NeutronsOnGas)
 
 #----------------------------------------------------------------------------
 # Find Geant4 package, activating all available UI and Vis drivers by default
@@ -46,24 +46,24 @@ endif()
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
-add_executable(TestEm7 TestEm7.cc ${sources} ${headers})
+add_executable(NeutronsOnGas NeutronsOnGas.cc ${sources} ${headers})
 if(ROOT_FOUND)
-  target_link_libraries(TestEm7 ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
+  target_link_libraries(NeutronsOnGas ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
 else()
-  target_link_libraries(TestEm7 ${Geant4_LIBRARIES} )  
+  target_link_libraries(NeutronsOnGas ${Geant4_LIBRARIES} )  
 endif()
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
-# build TestEm7. This is so that we can run the executable directly because it
+# build NeutronsOnGas. This is so that we can run the executable directly because it
 # relies on these scripts being in the current working directory.
 #
-file(GLOB TestEm7_SCRIPTS ${PROJECT_SOURCE_DIR}/*.mac)
+file(GLOB NeutronsOnGas_SCRIPTS ${PROJECT_SOURCE_DIR}/*.mac)
 
-set(TestEm7_PLOT_SCRIPTS
-  TestEm7.in plotHisto.C plot.gp pres.txt 
+set(NeutronsOnGas_PLOT_SCRIPTS
+  NeutronsOnGas.in plotHisto.C plot.gp pres.txt 
   )
 
-foreach(_script ${TestEm7_SCRIPTS})
+foreach(_script ${NeutronsOnGas_SCRIPTS})
   get_filename_component(barename ${_script} NAME)
   configure_file(
     ${_script}
@@ -72,7 +72,7 @@ foreach(_script ${TestEm7_SCRIPTS})
     )
 endforeach()
 
-foreach(_script ${TestEm7_PLOT_SCRIPTS})
+foreach(_script ${NeutronsOnGas_PLOT_SCRIPTS})
   configure_file(
     ${PROJECT_SOURCE_DIR}/${_script}
     ${PROJECT_BINARY_DIR}/${_script}
@@ -83,5 +83,5 @@ endforeach()
 #----------------------------------------------------------------------------
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
-install(TARGETS TestEm7 DESTINATION bin)
+install(TARGETS NeutronsOnGas DESTINATION bin)
 
