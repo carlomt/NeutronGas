@@ -41,12 +41,13 @@ public:
   // TString PrimaryName;
   // Double_t PrimaryE;
   // //  Double_t xsec;
-  // Int_t nSec;
-  // TString ParticleName;
-  // TString ParticleType;
+  Int_t nSec;
+  Int_t PDGencoding;
+  TString ParticleName;
+  TString ParticleType;
   Double_t Ek;
-  // Int_t A;
-  // Int_t Z;
+  Int_t A;
+  Int_t Z;
   // Double_t ExcitationE;
   // Bool_t IsShortLived;  
   // Bool_t IsStable;
@@ -65,9 +66,9 @@ public:
   // Int_t hot_A;
   // Int_t hot_Z;
 
-  // Double_t px;
-  // Double_t py;
-  // Double_t pz;
+  Double_t px;
+  Double_t py;
+  Double_t pz;
   // Double_t cm_px;
   // Double_t cm_py;
   // Double_t cm_pz;

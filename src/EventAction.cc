@@ -34,7 +34,11 @@
 #include "G4UnitsTable.hh" 
 #include "globals.hh"
 
-#include "g4root.hh"
+//#include "g4root.hh"
+
+#ifndef __WITHOUT_ROOT__
+#include "TreeManager.hh"
+#endif
 
 EventAction::EventAction()
   : G4UserEventAction(),
@@ -45,10 +49,12 @@ EventAction::EventAction()
 EventAction::~EventAction()
 {;}
 
-void EventAction::BeginOfEventAction(const G4Event*)
+void EventAction::BeginOfEventAction(const G4Event* evt)
 {
     fTotalPrimaryTrackLength = 0.;
-
+#ifndef __WITHOUT_ROOT__
+    TreeManager::Instance()->EventNumber = evt->GetEventID();
+#endif
     // auto AnalysisManager = G4AnalysisManager::Instance();
 
     // Default values (to be reset via /analysis/h1/set command)               

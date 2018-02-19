@@ -69,12 +69,13 @@ TreeManager::TreeManager() :
   // fTree->Branch("PrimaryName",&PrimaryName);  
   // fTree->Branch("PrimaryE",&PrimaryE,"PrimaryE/D");
   // //  fTree->Branch("xsec",&xsec,"xsec/D");  
-  // fTree->Branch("nSec", &nSec, "nSec/I");
-  // fTree->Branch("ParticleName",&ParticleName);
-  // fTree->Branch("ParticleType",&ParticleType);
+  fTree->Branch("nSec", &nSec, "nSec/I");
+  fTree->Branch("PDGencoding", &PDGencoding, "PDGencoding/I");  
+  fTree->Branch("ParticleName",&ParticleName);
+  fTree->Branch("ParticleType",&ParticleType);
   fTree->Branch("Ek",&Ek,"Ek/D");
-  // fTree->Branch("A",&A,"A/I");
-  // fTree->Branch("Z",&Z,"Z/I");
+  fTree->Branch("A",&A,"A/I");
+  fTree->Branch("Z",&Z,"Z/I");
   // fTree->Branch("ExcitationE",&ExcitationE,"ExcitationE/D");
   // fTree->Branch("IsShortLived",&IsShortLived,"IsShortLived/O");  
   // fTree->Branch("IsStable",&IsStable,"IsStable/O");
@@ -91,9 +92,9 @@ TreeManager::TreeManager() :
   // fTree->Branch("hot_EeccCorr",&hot_EeccCorr,"hot_EeccCorr/D");
   // fTree->Branch("hot_A",&hot_A,"hot_A/D");
   // fTree->Branch("hot_Z",&hot_Z,"hot_Z/D");
-  // fTree->Branch("px",&px,"px/D");
-  // fTree->Branch("py",&py,"py/D");
-  // fTree->Branch("pz",&pz,"pz/D");  
+  fTree->Branch("px",&px,"px/D");
+  fTree->Branch("py",&py,"py/D");
+  fTree->Branch("pz",&pz,"pz/D");  
   // fTree->Branch("cm_px",&cm_px,"cm_px/D");
   // fTree->Branch("cm_py",&cm_py,"cm_py/D");
   // fTree->Branch("cm_pz",&cm_pz,"cm_pz/D");
@@ -192,8 +193,21 @@ Bool_t TreeManager::Write()
 
 void TreeManager::Clear()
 {
-  //  Run=0;
+  nSec = -1;
+  // Run=0;
   // ExcitationE=-1;
+  trackID = -1;
+  parentID = -1;
+  PDGencoding = -99;
+  Ek = -1.;
+  ParticleName = "";
+  ParticleType = "";
+  A = -1;
+  Z = -1;
+  px = -99.;
+  py = -99.;
+  pz = -99.;
+  
 }
 
 // void TreeManager::SetOutputFilename(const std::string fname)

@@ -138,10 +138,14 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
     //secondaries
     //
     const std::vector<const G4Track*>* secondary = step->GetSecondaryInCurrentStep();
+#ifndef __WITHOUT_ROOT__
+      TreeManager::Instance()->nSec = secondary->size();
+#endif
     for (size_t lp=0; lp<(*secondary).size(); lp++)
       {
 	const G4Track* thisTrack = (*secondary)[lp];
 	G4ParticleDefinition* particle = thisTrack->GetDefinition();
+	G4int PDGenc =  particle->GetPDGEncoding();
 	G4int trackID =  thisTrack->GetTrackID();
 	G4int parentID = thisTrack->GetParentID();
 	G4String name   = particle->GetParticleName();
@@ -167,8 +171,17 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
 	TreeManager* treeManager = TreeManager::Instance();
 	treeManager->trackID = trackID;
 	treeManager->parentID = parentID;
+	treeManager->PDGencoding = PDGenc;
+	treeManager->ParticleName = name;
+	treeManager->ParticleType = type;
+	treeManager->A = A;
+	treeManager->Z = Z;
+	treeManager->px = px;	
+	treeManager->py = py;	
+	treeManager->pz = pz;	
 	treeManager->Ek = energy;
 	treeManager->Fill();
+	treeManager->Clear();
 #endif
        }//end loop on secondaries
 }
