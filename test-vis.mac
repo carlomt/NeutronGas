@@ -12,6 +12,7 @@
 /testem/phys/addPhysics Shielding
 
 /tracking/verbose 0
+/run/numberOfThreads 1
 
 /run/initialize
 
@@ -26,4 +27,4 @@
 #/gun/energy 10 keV
 /gun/energy 5 MeV
 
-/run/beamOn 1
+#/run/beamOn 1
