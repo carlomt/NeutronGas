@@ -64,7 +64,7 @@ DetectorConstruction::DetectorConstruction()
     fLWorld(nullptr)
 {
   // default parameter values
-  fAbsorSizeX = fAbsorSizeYZ = 20*cm;
+  fAbsorSizeX = fAbsorSizeYZ = 50*cm;
   fWorldSizeX = fWorldSizeYZ = 1.2*fAbsorSizeX;
   
   fTallyNumber = 0;
@@ -284,9 +284,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),LBox1, "Box1",fLWorld,false,0); 
 
   // gas between PVC box and GEM stuff
-  G4double Box2SizeX = Box1SizeX-Box1ThicknessX;
-  G4double Box2SizeY = Box1SizeY-Box1ThicknessY;
-  G4double Box2SizeZ = Box1SizeZ-Box1ThicknessZ;
+  G4double Box2SizeX = Box1SizeX-2*Box1ThicknessX;
+  G4double Box2SizeY = Box1SizeY-2*Box1ThicknessY;
+  G4double Box2SizeZ = Box1SizeZ-2*Box1ThicknessZ;
   G4Box*  Box2 = new G4Box("Box2", Box2SizeX/2,Box2SizeY/2,Box2SizeZ/2);
   G4LogicalVolume* LBox2 = new G4LogicalVolume(Box2,fAbsorMaterial,"Box2");
   new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),LBox2, "Box2",LBox1,false,0);
@@ -294,8 +294,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   // GEM FR4 frame+PCB
   G4double Box3SizeX = 18*cm;
   G4double Box3SizeY = 18*cm;
-  G4double Box3SizeZ = 3*cm;
-  G4double Box3Z = -Box1SizeZ/2.+Box1ThicknessZ+Box3SizeZ/2.;
+  G4double Box3SizeZ = 2.5*cm;
+  G4double Box3Z = -Box2SizeZ/2.+Box3SizeZ/2.;
 
   G4int ncomponents, natoms;
   G4String symbol;
@@ -321,13 +321,13 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4Material* Box3Material  = FR4;
   G4Box*  Box3 = new G4Box("Box3", Box3SizeX/2,Box3SizeY/2,Box3SizeZ/2);
   G4LogicalVolume* LBox3 = new G4LogicalVolume(Box3,Box3Material,"Box3");
-  new G4PVPlacement(0,G4ThreeVector(0.,0.,Box3Z),LBox3, "Box4",LBox2,false,0);
+  new G4PVPlacement(0,G4ThreeVector(0.,0.,Box3Z),LBox3, "Box3",LBox2,false,0);
 
   // GEM (for now single GEM)
   G4double Box4SizeX = 10 *cm;
   G4double Box4SizeY = 10 *cm;
   G4double Box4SizeZ = 0.5 *cm;
-  G4double Box4Z = -Box1SizeZ/2.+Box1ThicknessZ+Box3SizeZ/2.+Box4SizeZ/2.;
+  G4double Box4Z = Box3Z+Box3SizeZ/2.+Box4SizeZ/2.;
   G4Material* Box4Material  = man->FindOrBuildMaterial("G4_KAPTON");
   G4Box*  Box4 = new G4Box("Box4", Box4SizeX/2,Box4SizeY/2,Box4SizeZ/2);
   G4LogicalVolume* LBox4 = new G4LogicalVolume(Box4,Box4Material,"Box4");
