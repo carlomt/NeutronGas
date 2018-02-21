@@ -265,17 +265,83 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                              0,                           //mother  volume
                              false,                       //no boolean operation
                              0);                          //copy number
-  //                           
-  // Absorber
-  //                           
-  G4Box*
+
+  // CECILIA
+
+  G4NistManager* man = G4NistManager::Instance();
+
+  
+  // outer PVC box
+  G4double Box1SizeX = 30.3 *cm;
+  G4double Box1SizeY = 30.3 *cm;
+  G4double Box1SizeZ = 8 *cm;
+  G4double Box1ThicknessX = 2*cm;
+  G4double Box1ThicknessY = 2*cm;
+  G4double Box1ThicknessZ = 2*cm;
+  G4Material* Box1Material  = man->FindOrBuildMaterial("G4_POLYVINYL_CHLORIDE");
+  G4Box*  Box1 = new G4Box("Box1", Box1SizeX/2,Box1SizeY/2,Box1SizeZ/2);
+  G4LogicalVolume* LBox1 = new G4LogicalVolume(Box1,Box1Material,"Box1");                     
+  new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),LBox1, "Box1",fLWorld,false,0); 
+
+  // gas between PVC box and GEM stuff
+  G4double Box2SizeX = Box1SizeX-Box1ThicknessX;
+  G4double Box2SizeY = Box1SizeY-Box1ThicknessY;
+  G4double Box2SizeZ = Box1SizeZ-Box1ThicknessZ;
+  G4Box*  Box2 = new G4Box("Box2", Box2SizeX/2,Box2SizeY/2,Box2SizeZ/2);
+  G4LogicalVolume* LBox2 = new G4LogicalVolume(Box2,fAbsorMaterial,"Box2");
+  new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),LBox2, "Box2",LBox1,false,0);
+  
+  // GEM FR4 frame+PCB
+  G4double Box3SizeX = 18*cm;
+  G4double Box3SizeY = 18*cm;
+  G4double Box3SizeZ = 3*cm;
+  G4double Box3Z = -Box1SizeZ/2.+Box1ThicknessZ+Box3SizeZ/2.;
+
+  G4int ncomponents, natoms;
+  G4String symbol;
+  G4double a, z;
+  G4double abundance, fractionmass;
+  //Epoxy 
+  G4double density = 1.2*g/cm3;
+  G4Material* Epoxy = new G4Material("Epoxy" , density, ncomponents=2);
+  G4Element* H = new G4Element("Hydrogen", "H", 1,  1.008*g/mole);
+  G4Element* C = new G4Element("Carbon",   "C", 6, 12.011*g/mole);
+  Epoxy->AddElement(H, natoms=2);
+  Epoxy->AddElement(C, natoms=2);
+  //FR4 (Glass + Epoxy)
+  density = 1.86*g/cm3;
+  G4Element* O  = new G4Element("Oxygen"  ,symbol="O" , z= 8., a= 16.00*g/mole);
+  G4Element* Si = new G4Element("Silicon",symbol="Si" , z= 14., a= 28.09*g/mole);
+  G4Material* SiO2 = new G4Material("quartz",density= 2.200*g/cm3, ncomponents=2);
+  SiO2->AddElement(Si, natoms=1);
+  SiO2->AddElement(O , natoms=2);
+  G4Material* FR4 = new G4Material("FR4"  , density, ncomponents=2);
+  FR4->AddMaterial(SiO2, fractionmass=0.528);
+  FR4->AddMaterial(Epoxy, fractionmass=0.472);
+  G4Material* Box3Material  = FR4;
+  G4Box*  Box3 = new G4Box("Box3", Box3SizeX/2,Box3SizeY/2,Box3SizeZ/2);
+  G4LogicalVolume* LBox3 = new G4LogicalVolume(Box3,Box3Material,"Box3");
+  new G4PVPlacement(0,G4ThreeVector(0.,0.,Box3Z),LBox3, "Box4",LBox2,false,0);
+
+  // GEM (for now single GEM)
+  G4double Box4SizeX = 10 *cm;
+  G4double Box4SizeY = 10 *cm;
+  G4double Box4SizeZ = 0.5 *cm;
+  G4double Box4Z = -Box1SizeZ/2.+Box1ThicknessZ+Box3SizeZ/2.+Box4SizeZ/2.;
+  G4Material* Box4Material  = man->FindOrBuildMaterial("G4_KAPTON");
+  G4Box*  Box4 = new G4Box("Box4", Box4SizeX/2,Box4SizeY/2,Box4SizeZ/2);
+  G4LogicalVolume* LBox4 = new G4LogicalVolume(Box4,Box4Material,"Box4");
+  new G4PVPlacement(0,G4ThreeVector(0.,0.,Box4Z),LBox4, "Box5",LBox2,false,0);  
+
+
+  /*G4Box*
   sAbsor = new G4Box("Absorber",                                 //name
                    fAbsorSizeX/2,fAbsorSizeYZ/2,fAbsorSizeYZ/2); //dimensions
                                                                  
   fLAbsor = new G4LogicalVolume(sAbsor,                   //shape
                                 fAbsorMaterial,           //material
                                 "Absorber");              //name
-  
+
                               
   new G4PVPlacement(0,                           //no rotation
                     G4ThreeVector(0.,0.,0.),     //at (0,0,0)
@@ -284,6 +350,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                     fLWorld,                     //mother  volume
                     false,                       //no boolean operation
                     0);                          //copy number
+  */
   //
   // Tallies (optional)
   //
