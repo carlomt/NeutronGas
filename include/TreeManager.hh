@@ -69,6 +69,9 @@ public:
   Double_t px;
   Double_t py;
   Double_t pz;
+  Double_t x;
+  Double_t y;
+  Double_t z;
   // Double_t cm_px;
   // Double_t cm_py;
   // Double_t cm_pz;

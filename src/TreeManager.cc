@@ -92,6 +92,9 @@ TreeManager::TreeManager() :
   // fTree->Branch("hot_EeccCorr",&hot_EeccCorr,"hot_EeccCorr/D");
   // fTree->Branch("hot_A",&hot_A,"hot_A/D");
   // fTree->Branch("hot_Z",&hot_Z,"hot_Z/D");
+  fTree->Branch("x",&x,"x/D");
+  fTree->Branch("y",&y,"y/D");
+  fTree->Branch("z",&z,"z/D");
   fTree->Branch("px",&px,"px/D");
   fTree->Branch("py",&py,"py/D");
   fTree->Branch("pz",&pz,"pz/D");  

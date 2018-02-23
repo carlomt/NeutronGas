@@ -176,6 +176,9 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
 	treeManager->ParticleType = type;
 	treeManager->A = A;
 	treeManager->Z = Z;
+	treeManager->x = x2;	
+	treeManager->y = y2;	
+	treeManager->z = z2;		
 	treeManager->px = px;	
 	treeManager->py = py;	
 	treeManager->pz = pz;	
