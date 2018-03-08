@@ -272,31 +272,41 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   
   // outer PVC box
-  G4double Box1SizeX = 30.3 *cm;
-  G4double Box1SizeY = 30.3 *cm;
-  G4double Box1SizeZ = 8 *cm;
-  G4double Box1ThicknessX = 2*cm;
-  G4double Box1ThicknessY = 2*cm;
-  G4double Box1ThicknessZ = 2*cm;
-  G4Material* Box1Material  = man->FindOrBuildMaterial("G4_POLYVINYL_CHLORIDE");
-  G4Box*  Box1 = new G4Box("Box1", Box1SizeX/2,Box1SizeY/2,Box1SizeZ/2);
-  G4LogicalVolume* LBox1 = new G4LogicalVolume(Box1,Box1Material,"Box1");                     
-  new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),LBox1, "Box1",fLWorld,false,0); 
+  G4double BlackBoxSizeX = 30.3 *cm;
+  G4double BlackBoxSizeY = 30.3 *cm;
+  G4double BlackBoxSizeZ = 4 *cm;
+  G4double BlackBoxThX = 0.5*cm;
+  G4double BlackBoxThY = 0.5*cm;
+  G4double BlackBoxThZ = 0.5*cm;
+  G4Material* BlackBoxMat  = man->FindOrBuildMaterial("G4_POLYVINYL_CHLORIDE");
+  G4Box*  BlackBox = new G4Box("BlackBox", BlackBoxSizeX/2,BlackBoxSizeY/2,BlackBoxSizeZ/2);
+  G4LogicalVolume* LBlackBox = new G4LogicalVolume(BlackBox,BlackBoxMat,"BlackBox");                     
+  new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),LBlackBox, "BlackBox",fLWorld,false,0); 
 
-  // gas between PVC box and GEM stuff
-  G4double Box2SizeX = Box1SizeX-2*Box1ThicknessX;
-  G4double Box2SizeY = Box1SizeY-2*Box1ThicknessY;
-  G4double Box2SizeZ = Box1SizeZ-2*Box1ThicknessZ;
-  G4Box*  Box2 = new G4Box("Box2", Box2SizeX/2,Box2SizeY/2,Box2SizeZ/2);
-  G4LogicalVolume* LBox2 = new G4LogicalVolume(Box2,fAbsorMaterial,"Box2");
-  new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),LBox2, "Box2",LBox1,false,0);
+  // add endcaps: to be done
   
-  // GEM FR4 frame+PCB
-  G4double Box3SizeX = 18*cm;
-  G4double Box3SizeY = 18*cm;
-  G4double Box3SizeZ = 2.5*cm;
-  G4double Box3Z = -Box2SizeZ/2.+Box3SizeZ/2.;
+  // air inside Box
+  G4double AirSizeX = BlackBoxSizeX-2*BlackBoxThX;
+  G4double AirSizeY = BlackBoxSizeY-2*BlackBoxThY;
+  G4double AirSizeZ = BlackBoxSizeZ-2*BlackBoxThZ;
+  G4Material* AirMat  = man->FindOrBuildMaterial("G4_AIR");
+  G4Box*  Air = new G4Box("Air", AirSizeX/2,AirSizeY/2,AirSizeZ/2);
+  G4LogicalVolume* LAir = new G4LogicalVolume(Air,AirMat,"Air");
+  new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),LAir, "Air",LBlackBox,false,0);
+  G4cout << " Air " << " 0 " << -AirSizeZ/2. << " " << AirSizeZ/2. << G4endl;
 
+  //PCB: missing
+
+  // GEM frame
+  G4double FrameSizeX = 18*cm;
+  G4double FrameSizeY = 18*cm;
+  G4double FrameSizeZ = 2.5*cm; 
+  G4double FrameThX = 0.5*cm;
+  G4double FrameThY = 0.5*cm;
+  G4double FrameThZ = 0.5*cm;
+  G4double FrameZ = -AirSizeZ/2.+FrameSizeZ/2.;
+
+  G4cout << " Z Frame " << FrameZ << " " << FrameZ-FrameSizeZ/2. << " " << FrameZ+FrameSizeZ/2. << G4endl;
   G4int ncomponents, natoms;
   G4String symbol;
   G4double a, z;
@@ -318,21 +328,33 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4Material* FR4 = new G4Material("FR4"  , density, ncomponents=2);
   FR4->AddMaterial(SiO2, fractionmass=0.528);
   FR4->AddMaterial(Epoxy, fractionmass=0.472);
-  G4Material* Box3Material  = FR4;
-  G4Box*  Box3 = new G4Box("Box3", Box3SizeX/2,Box3SizeY/2,Box3SizeZ/2);
-  G4LogicalVolume* LBox3 = new G4LogicalVolume(Box3,Box3Material,"Box3");
-  new G4PVPlacement(0,G4ThreeVector(0.,0.,Box3Z),LBox3, "Box3",LBox2,false,0);
+  G4Material* FrameMat  = FR4;
+  G4Box*  Frame = new G4Box("Frame", FrameSizeX/2,FrameSizeY/2,FrameSizeZ/2);
+  G4LogicalVolume* LFrame = new G4LogicalVolume(Frame,FrameMat,"Frame");
+  new G4PVPlacement(0,G4ThreeVector(0.,0.,FrameZ),LFrame, "Frame",LAir,false,0);
 
-  // GEM (for now single GEM)
-  G4double Box4SizeX = 10 *cm;
-  G4double Box4SizeY = 10 *cm;
-  G4double Box4SizeZ = 0.5 *cm;
-  G4double Box4Z = Box3Z+Box3SizeZ/2.+Box4SizeZ/2.;
-  G4Material* Box4Material  = man->FindOrBuildMaterial("G4_KAPTON");
-  G4Box*  Box4 = new G4Box("Box4", Box4SizeX/2,Box4SizeY/2,Box4SizeZ/2);
-  G4LogicalVolume* LBox4 = new G4LogicalVolume(Box4,Box4Material,"Box4");
-  new G4PVPlacement(0,G4ThreeVector(0.,0.,Box4Z),LBox4, "Box5",LBox2,false,0);  
+  // GAS
+  G4double GasSizeX = FrameSizeX-2*FrameThX;
+  G4double GasSizeY = FrameSizeY-2*FrameThY;
+  G4double GasSizeZ = FrameSizeZ-2*FrameThZ;
+  G4double GasZ = FrameZ;
+  G4cout << " Z Gas " << FrameZ << " " << FrameZ-GasSizeZ/2. << " " << FrameZ+GasSizeZ/2. << G4endl;
+  G4Material* GasMaterial  = man->FindOrBuildMaterial("G4_KAPTON");
+  G4Box*  Gas = new G4Box("Gas", GasSizeX/2,GasSizeY/2,GasSizeZ/2);
+  G4LogicalVolume* LGas = new G4LogicalVolume(Gas,GasMaterial,"Gas");
+  new G4PVPlacement(0,G4ThreeVector(0.,0.,GasZ),LGas, "Gas",LFrame,false,0);  
 
+  // GEM 
+  G4double GEMSizeX = 10 *cm;
+  G4double GEMSizeY = 10 *cm;
+  G4double GEMSizeZ = 0.5 *cm;
+  G4double GEMZ = GasZ+GasSizeZ/2.-GEMSizeZ/2.;
+  G4cout << " Z GEM " << GEMZ << " " << GEMZ-GEMSizeZ/2. << " " << GEMZ+GEMSizeZ/2. << G4endl;
+  G4Material* GEMMaterial  = man->FindOrBuildMaterial("G4_KAPTON");
+  G4Box*  GEM = new G4Box("GEM", GEMSizeX/2,GEMSizeY/2,GEMSizeZ/2);
+  G4LogicalVolume* LGEM = new G4LogicalVolume(GEM,GEMMaterial,"GEM");
+  new G4PVPlacement(0,G4ThreeVector(0.,0.,GEMZ),LGEM, "GEM",LGas,false,0); 
+   
 
   /*G4Box*
   sAbsor = new G4Box("Absorber",                                 //name
