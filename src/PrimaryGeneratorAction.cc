@@ -81,6 +81,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   //this function is called at the begining of event
   //
   G4double x0 = -35.1*cm;// -0.5*(fDetector->GetWorldSizeX());
+  x0=0;
   G4double y0 = 0.*cm, z0 = 1.5*cm;
   fInitialPosition = G4ThreeVector(x0,y0,z0);
   //randomize the beam, if requested.
@@ -102,7 +103,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   // G4double zDirection = costheta;
   // const G4ThreeVector momentumDirection = G4ThreeVector(xDirection,yDirection,zDirection);
   //
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1,0,0));
+  //  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1,0,0));
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0,0,-1));  
   
   fParticleGun->SetParticlePosition(fInitialPosition);
   fParticleGun->GeneratePrimaryVertex(anEvent);

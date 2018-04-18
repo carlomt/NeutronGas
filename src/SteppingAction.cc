@@ -46,6 +46,7 @@
 
 #ifndef __WITHOUT_ROOT__
 #include "TreeManager.hh"
+#include "TreeManager2.hh"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -70,6 +71,9 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   G4StepPoint* prePoint  = step->GetPreStepPoint();
   G4StepPoint* postPoint = step->GetPostStepPoint();
 
+
+
+  
   // G4int copyNb = prePoint->GetTouchableHandle()->GetCopyNumber();
   // if (copyNb > 0) { fRunAction->FillTallyEdep(copyNb-1, edep); }
 
@@ -107,6 +111,32 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   G4double y2 = postPoint->GetPosition().y();//+ ymax*0.5;
   G4double z1 = prePoint->GetPosition().z() ;//+ zmax*0.5;
   G4double z2 = postPoint->GetPosition().z();//+ zmax*0.5;
+
+#ifndef __WITHOUT_ROOT__
+  const G4Track* thisSteppingTrack = step->GetTrack();
+	TreeManager2* treeManager2 = TreeManager2::Instance();
+	treeManager2->trackID = thisSteppingTrack->GetTrackID();
+	treeManager2->parentID = thisSteppingTrack->GetParentID();
+	treeManager2->PDGencoding = thisSteppingTrack->GetDefinition()->GetPDGEncoding();
+	treeManager2->ParticleName = thisSteppingTrack->GetDefinition()->GetParticleName();
+	treeManager2->ParticleType = thisSteppingTrack->GetDefinition()->GetParticleType();
+	treeManager2->A = thisSteppingTrack->GetDefinition()->GetAtomicMass();
+	treeManager2->Z = thisSteppingTrack->GetDefinition()->GetAtomicNumber();
+	treeManager2->x2 = x2;	
+	treeManager2->y2 = y2;	
+	treeManager2->z2 = z2;
+	treeManager2->x1 = x1;	
+	treeManager2->y1 = y1;	
+	treeManager2->z1 = z1;			
+	treeManager2->px = thisSteppingTrack->GetMomentum().x()/CLHEP::MeV;	
+	treeManager2->py = thisSteppingTrack->GetMomentum().y()/CLHEP::MeV;	
+	treeManager2->pz = thisSteppingTrack->GetMomentum().z()/CLHEP::MeV;
+	treeManager2->Ek = thisSteppingTrack->GetKineticEnergy()/CLHEP::MeV;
+	treeManager2->EDeposited = step->GetTotalEnergyDeposit()/CLHEP::MeV;
+	treeManager2->Fill();
+	//	treeManager2->Clear();
+#endif
+  
   // if(x1 >= 0.0 && x2 <= xmax)
     {  
       G4double x  = x1 + G4UniformRand()*(x2-x1);
@@ -154,9 +184,9 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
 	G4int A = particle->GetAtomicMass();
 	G4int Z =  particle->GetAtomicNumber();
 	G4LorentzVector fourMomentum((*secondary)[lp]->GetMomentum(), (*secondary)[lp]->GetTotalEnergy());
-	G4double px = fourMomentum.x();
-	G4double py = fourMomentum.y();
-	G4double pz = fourMomentum.z();
+	G4double px = fourMomentum.x()/CLHEP::MeV;
+	G4double py = fourMomentum.y()/CLHEP::MeV;
+	G4double pz = fourMomentum.z()/CLHEP::MeV;
 	if (type == "nucleus")
         {
 	    G4double ExcitationE = ((G4Ions*)particle)->GetExcitationEnergy()/CLHEP::eV;

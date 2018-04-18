@@ -48,6 +48,7 @@
 #include <fstream>
 #ifndef __WITHOUT_ROOT__
 #include "TreeManager.hh"
+#include "TreeManager2.hh"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -77,9 +78,9 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 #ifndef __WITHOUT_ROOT__
   TreeManager* treeManager = TreeManager::Instance();
-    {
-      treeManager->Run = aRun->GetRunID();
-    }
+  treeManager->Run = aRun->GetRunID();
+  TreeManager2* treeManager2 = TreeManager2::Instance();
+  treeManager2->Run = aRun->GetRunID();
 #endif
   // if(!fAnalysisManager) { BookHisto(); }
   
@@ -126,6 +127,8 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     {
       TreeManager* treeManager = TreeManager::Instance();
       treeManager->Write();
+      TreeManager2* treeManager2 = TreeManager2::Instance();
+      treeManager2->Write();      
     }
 #endif
   
