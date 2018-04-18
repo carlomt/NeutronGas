@@ -265,48 +265,60 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                              0,                           //mother  volume
                              false,                       //no boolean operation
                              0);                          //copy number
+  G4double BlackBoxSizeX = 30.3 *cm;
+  G4double BlackBoxSizeY = 30.3 *cm;
+  G4double BlackBoxSizeZ = 8 *cm;
+  G4double BlackBoxThX = 0.5*cm;
+  G4double BlackBoxThY = 0.5*cm;
+  G4double BlackBoxThZ = 0.5*cm;
 
+  G4double AirSizeX = BlackBoxSizeX-2*BlackBoxThX;
+  G4double AirSizeY = BlackBoxSizeY-2*BlackBoxThY;
+  G4double AirSizeZ = BlackBoxSizeZ-2*BlackBoxThZ; // 7cm
+  
+  G4double FrameSizeX = 18*cm;
+  G4double FrameSizeY = 18*cm;                                                                          
+  G4double FrameSizeZ = 2.*cm; 
+  G4double FrameZ = -AirSizeZ/2.+FrameSizeZ/2.; //-2.5 cm centro della cornice
+
+  G4cout << " Z Framce center " << FrameZ << G4endl;
+  
+  G4double GasSizeX = 10 * cm; 
+  G4double GasSizeY = 10 * cm;
+  G4double GasSizeZ = FrameSizeZ/2.; // la cornice la riempio per meta' (in z) di GEM - 1cm
+  G4double GasZ = -GasSizeZ/2; // -2.5cm-0.5cm = -3cm centro GAS
+  G4cout << " Z Gas center " << GasZ << G4endl;
+  
+  G4double GEMSizeX = 10 *cm;
+  G4double GEMSizeY = 10 *cm;
+  G4double GEMSizeZ = FrameSizeZ-GasSizeZ;
+  G4double GEMZ = GEMSizeZ/2; // -2.5cm+0.75cm = -1.75cm centro GEM; //
+  G4cout << " Z GEM center " << GEMZ << G4endl;
+
+  
   // CECILIA
 
   G4NistManager* man = G4NistManager::Instance();
 
   
   // outer PVC box
-  G4double BlackBoxSizeX = 30.3 *cm;
-  G4double BlackBoxSizeY = 30.3 *cm;
-  G4double BlackBoxSizeZ = 4 *cm;
-  G4double BlackBoxThX = 0.5*cm;
-  G4double BlackBoxThY = 0.5*cm;
-  G4double BlackBoxThZ = 0.5*cm;
   G4Material* BlackBoxMat  = man->FindOrBuildMaterial("G4_POLYVINYL_CHLORIDE");
   G4Box*  BlackBox = new G4Box("BlackBox", BlackBoxSizeX/2,BlackBoxSizeY/2,BlackBoxSizeZ/2);
-  G4LogicalVolume* LBlackBox = new G4LogicalVolume(BlackBox,BlackBoxMat,"BlackBox");                     
+       G4LogicalVolume* LBlackBox = new G4LogicalVolume(BlackBox,BlackBoxMat,"BlackBox");                     
   new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),LBlackBox, "BlackBox",fLWorld,false,0); 
 
   // add endcaps: to be done
   
   // air inside Box
-  G4double AirSizeX = BlackBoxSizeX-2*BlackBoxThX;
-  G4double AirSizeY = BlackBoxSizeY-2*BlackBoxThY;
-  G4double AirSizeZ = BlackBoxSizeZ-2*BlackBoxThZ;
   G4Material* AirMat  = man->FindOrBuildMaterial("G4_AIR");
   G4Box*  Air = new G4Box("Air", AirSizeX/2,AirSizeY/2,AirSizeZ/2);
   G4LogicalVolume* LAir = new G4LogicalVolume(Air,AirMat,"Air");
   new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),LAir, "Air",LBlackBox,false,0);
-  G4cout << " Air " << " 0 " << -AirSizeZ/2. << " " << AirSizeZ/2. << G4endl;
-
+  G4cout << " Air Center" << " 0 " << -AirSizeZ/2. << " " << AirSizeZ/2. << G4endl; // -3.5cm (inzio del gas in z dove finisce la cornice)
+                                                
   //PCB: missing
 
   // GEM frame
-  G4double FrameSizeX = 18*cm;
-  G4double FrameSizeY = 18*cm;
-  G4double FrameSizeZ = 2.5*cm; 
-  G4double FrameThX = 0.5*cm;
-  G4double FrameThY = 0.5*cm;
-  G4double FrameThZ = 0.5*cm;
-  G4double FrameZ = -AirSizeZ/2.+FrameSizeZ/2.;
-
-  G4cout << " Z Frame " << FrameZ << " " << FrameZ-FrameSizeZ/2. << " " << FrameZ+FrameSizeZ/2. << G4endl;
   G4int ncomponents, natoms;
   G4String symbol;
   G4double a, z;
@@ -333,27 +345,17 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4LogicalVolume* LFrame = new G4LogicalVolume(Frame,FrameMat,"Frame");
   new G4PVPlacement(0,G4ThreeVector(0.,0.,FrameZ),LFrame, "Frame",LAir,false,0);
 
-  // GAS
-  G4double GasSizeX = FrameSizeX-2*FrameThX;
-  G4double GasSizeY = FrameSizeY-2*FrameThY;
-  G4double GasSizeZ = FrameSizeZ-2*FrameThZ;
-  G4double GasZ = FrameZ;
-  G4cout << " Z Gas " << FrameZ << " " << FrameZ-GasSizeZ/2. << " " << FrameZ+GasSizeZ/2. << G4endl;
+  // GAS riempio meta' cornice (in z)
   G4Material* GasMaterial  = man->FindOrBuildMaterial("G4_KAPTON");
   G4Box*  Gas = new G4Box("Gas", GasSizeX/2,GasSizeY/2,GasSizeZ/2);
   G4LogicalVolume* LGas = new G4LogicalVolume(Gas,GasMaterial,"Gas");
   new G4PVPlacement(0,G4ThreeVector(0.,0.,GasZ),LGas, "Gas",LFrame,false,0);  
 
-  // GEM 
-  G4double GEMSizeX = 10 *cm;
-  G4double GEMSizeY = 10 *cm;
-  G4double GEMSizeZ = 0.5 *cm;
-  G4double GEMZ = GasZ+GasSizeZ/2.-GEMSizeZ/2.;
-  G4cout << " Z GEM " << GEMZ << " " << GEMZ-GEMSizeZ/2. << " " << GEMZ+GEMSizeZ/2. << G4endl;
+  // GEM riempio seconda meta' cornice (in z)   
   G4Material* GEMMaterial  = man->FindOrBuildMaterial("G4_KAPTON");
   G4Box*  GEM = new G4Box("GEM", GEMSizeX/2,GEMSizeY/2,GEMSizeZ/2);
   G4LogicalVolume* LGEM = new G4LogicalVolume(GEM,GEMMaterial,"GEM");
-  new G4PVPlacement(0,G4ThreeVector(0.,0.,GEMZ),LGEM, "GEM",LGas,false,0); 
+  new G4PVPlacement(0,G4ThreeVector(0.,0.,GEMZ),LGEM, "GEM",LFrame,false,0); 
    
 
   /*G4Box*
