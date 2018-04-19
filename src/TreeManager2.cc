@@ -6,7 +6,7 @@
 
 #include "G4Threading.hh"
 
-std::string    TreeManager2::fName = "tm-out";
+std::string    TreeManager2::fName = "tm2-out";
 bool TreeManager2::fIsActive = false;
 
 namespace { 
@@ -29,7 +29,7 @@ TreeManager2::TreeManager2() :
   fFile(0)//,
 {
   messenger = new TreeManagerMessenger2(this);
-
+  
   //Booking of histograms has to be protected.
   //In addition there are issues with ROOT that is 
   //heavily non thread-safe. In particular I/O related operations
@@ -37,39 +37,39 @@ TreeManager2::TreeManager2() :
   //here
   G4AutoLock l(&dataManipulationMutex);
 
-
+  
   if(G4Threading::G4GetThreadId()>=0)
     {
-  OpenFile();
-  
-  fTree = new TTree("tree2","name2");
-
-  fTree->Branch("Run",&Run,"Run/I");
-  fTree->Branch("EventNumber", &EventNumber, "EventNumber/I");
-  fTree->Branch("PDGencoding", &PDGencoding, "PDGencoding/I");  
-  fTree->Branch("ParticleName",&ParticleName);
-  fTree->Branch("ParticleType",&ParticleType);
-  fTree->Branch("Ek",&Ek,"Ek/D");
-  fTree->Branch("A",&A,"A/I");
-  fTree->Branch("Z",&Z,"Z/I");
-  fTree->Branch("x1",&x1,"x1/D");
-  fTree->Branch("y1",&y1,"y1/D");
-  fTree->Branch("z1",&z1,"z1/D");
-  fTree->Branch("x2",&x2,"x2/D");
-  fTree->Branch("y2",&y2,"y2/D");
-  fTree->Branch("z2",&z2,"z2/D");
-  fTree->Branch("px",&px,"px/D");
-  fTree->Branch("py",&py,"py/D");
-  fTree->Branch("pz",&pz,"pz/D");  
-  fTree->Branch("trackID",&trackID,"trackID/I");
-  fTree->Branch("parentID",&parentID,"parentID/I");
-  
-  fTree->Branch("EDeposited", &EDeposited,"EDeposited/D");          
-  // fTree->Branch("DepositionX",&DepositionX);        
-  // fTree->Branch("DepositionY",&DepositionY);        
-  // fTree->Branch("DepositionZ",&DepositionZ);        
-  
-  this->Clear();
+      OpenFile();
+      
+      fTree = new TTree("tree2","name2");
+      
+      fTree->Branch("Run",&Run,"Run/I");
+      fTree->Branch("EventNumber", &EventNumber, "EventNumber/I");
+      fTree->Branch("PDGencoding", &PDGencoding, "PDGencoding/I");  
+      fTree->Branch("ParticleName",&ParticleName);
+      fTree->Branch("ParticleType",&ParticleType);
+      fTree->Branch("Ek",&Ek,"Ek/D");
+      fTree->Branch("A",&A,"A/I");
+      fTree->Branch("Z",&Z,"Z/I");
+      fTree->Branch("x1",&x1,"x1/D");
+      fTree->Branch("y1",&y1,"y1/D");
+      fTree->Branch("z1",&z1,"z1/D");
+      fTree->Branch("x2",&x2,"x2/D");
+      fTree->Branch("y2",&y2,"y2/D");
+      fTree->Branch("z2",&z2,"z2/D");
+      fTree->Branch("px",&px,"px/D");
+      fTree->Branch("py",&py,"py/D");
+      fTree->Branch("pz",&pz,"pz/D");  
+      fTree->Branch("trackID",&trackID,"trackID/I");
+      fTree->Branch("parentID",&parentID,"parentID/I");
+      
+      fTree->Branch("EDeposited", &EDeposited,"EDeposited/D");          
+      // fTree->Branch("DepositionX",&DepositionX);        
+      // fTree->Branch("DepositionY",&DepositionY);        
+      // fTree->Branch("DepositionZ",&DepositionZ);        
+      
+      this->Clear();
     }
 }
 

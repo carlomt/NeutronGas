@@ -37,7 +37,8 @@
 /particle/property/dump
 /particle/process/dump
 #
-/treeManager/setFileName n5MeV
+/treeManager/setFileName sec-n5MeV
+/treeManager2/setFileName edep-n5MeV
 #
 # /analysis/setFileName n5MeV
 # /analysis/h1/set 2 100 0 2 mm

@@ -78,7 +78,8 @@ int main(int argc,char** argv) {
   G4MTRunManager* runManager = new G4MTRunManager;
   G4int nThreads = G4Threading::G4GetNumberOfCores();
   if (argc==3) nThreads = G4UIcommand::ConvertToInt(argv[2]);
-  runManager->SetNumberOfThreads(nThreads);  
+  runManager->SetNumberOfThreads(nThreads);
+  runManager->SetNumberOfThreads(1);  //per il momento non funziona il multithreading
 #else
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);
