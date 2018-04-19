@@ -61,6 +61,7 @@
 
 #ifndef __WITHOUT_ROOT__
 #include "TreeManager.hh"
+#include "TreeManager2.hh"
 #endif
 
 #include "StepMax.hh"
@@ -86,6 +87,7 @@ int main(int argc,char** argv) {
 
 #ifndef __WITHOUT_ROOT__  
   TreeManager *treeManager=TreeManager::Instance();
+  TreeManager2 *treeManager2=TreeManager2::Instance();
 #endif  
   
   //set mandatory initialization classes
